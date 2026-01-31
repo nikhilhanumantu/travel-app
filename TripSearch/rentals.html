@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>TransportHub - Search</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: { "primary": "#137fec", "bg-light": "#f6f7f8", "bg-dark": "#101922" },
+                    fontFamily: { "display": ["Plus Jakarta Sans"] },
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: "Plus Jakarta Sans", sans-serif; }
+        .material-symbols-outlined { font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24; }
+        .active-tab { border-bottom: 2px solid #137fec; color: #137fec; }
+        .hide { display: none; }
+        
+        /* Custom Scrollbar for dropdowns */
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+    </style>
+</head>
+<body class="bg-bg-light dark:bg-bg-dark min-h-screen text-[#111418] dark:text-white" onclick="closeAllDropdowns()">
+
+<header class="flex items-center justify-between px-10 py-4 bg-white dark:bg-gray-900 border-b dark:border-gray-800 sticky top-0 z-50">
+    <div class="flex items-center gap-2">
+        <div class="bg-primary p-1.5 rounded-lg">
+            
+        </div>
+        <h1 class="text-xl font-bold tracking-tight">TravelEase</h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <span class="text-sm font-medium">John Doe</span>
+        <a href="profile.html"><div class="h-10 w-10 bg-primary rounded-full flex items-center justify-center text-white font-bold shadow-md">JD</div></a>
+    </div>
+</header>
+
+<main class="max-w-[1280px] mx-auto px-6 py-8">
+    
+    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-800 p-6 mb-8 relative z-40">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            
+            <div class="flex flex-col gap-1.5 w-full relative">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Pickup Location</label>
+                <div class="relative group">
+                    
+                    <input type="text" id="pickup" onkeyup="showSuggestions(this, 'pickup-list')" autocomplete="off" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium" placeholder="Enter City (e.g., Vijayawada)">
+                </div>
+                <div id="pickup-list" class="hidden absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 max-h-60 overflow-y-auto custom-scroll z-50">
+                    </div>
+            </div>
+            
+            <div class="flex flex-col gap-1.5 w-full">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Drop Location</label>
+                <div class="relative group">
+                  
+                    <input type="text" id="drop" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium" placeholder="Enter Destination">
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5 w-full">
+                <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Pickup Date</label>
+                <div class="relative group">
+                    <input type="datetime-local" id="dateInput" class="w-full pl-4 pr-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-700 dark:bg-gray-800 focus:ring-2 focus:ring-primary outline-none transition-all font-medium text-sm text-gray-600 dark:text-gray-300">
+                </div>
+            </div>
+
+            <button onclick="renderVehicles()" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-500/30">
+                 Search Cabs
+            </button>
+        </div>
+    </div>
+
+    <div class="flex gap-8 border-b border-gray-200 dark:border-gray-800 mb-8 overflow-x-auto pb-1">
+        <button onclick="filterCategory('cab')" class="tab-btn active-tab flex items-center gap-2 pb-3 px-2 transition-colors hover:text-primary whitespace-nowrap">
+        
+            <span class="font-bold text-sm">City Cabs</span>
+        </button>
+        <button onclick="filterCategory('self-drive')" class="tab-btn flex items-center gap-2 pb-3 px-2 text-gray-500 hover:text-primary transition-colors whitespace-nowrap">
+           
+            <span class="font-bold text-sm">Self-Drive Cars</span>
+        </button>
+        <button onclick="filterCategory('bike')" class="tab-btn flex items-center gap-2 pb-3 px-2 text-gray-500 hover:text-primary transition-colors whitespace-nowrap">
+            
+            <span class="font-bold text-sm">Bike Rentals</span>
+        </button>
+        <button onclick="filterCategory('van')" class="tab-btn flex items-center gap-2 pb-3 px-2 text-gray-500 hover:text-primary transition-colors whitespace-nowrap">
+           
+            <span class="font-bold text-sm">Van Rentals</span>
+        </button>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+        
+        <aside class="w-full lg:w-72 flex-shrink-0">
+            <div class="bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-200 dark:border-gray-800 sticky top-24">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="font-bold text-lg flex items-center gap-2"> Filters</h2>
+                    <button onclick="resetFilters()" class="text-xs text-primary font-bold hover:underline">RESET</button>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="text-sm font-bold mb-3 block">Max Price / Day</label>
+                    <input type="range" id="priceRange" min="300" max="15000" value="15000" class="w-full accent-primary h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-xs text-gray-500 mt-2 font-mono">
+                        <span>₹300</span>
+                        <span id="priceVal">₹15,000+</span>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100 dark:border-gray-800 my-4">
+
+                <div class="mb-6">
+                    <label class="text-sm font-bold mb-3 block">Vehicle Type</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-type rounded text-primary focus:ring-primary" value="Hatchback" checked> <span class="text-sm">Hatchback</span></label>
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-type rounded text-primary focus:ring-primary" value="Sedan" checked> <span class="text-sm">Sedan</span></label>
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-type rounded text-primary focus:ring-primary" value="SUV" checked> <span class="text-sm">SUV / MUV</span></label>
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-type rounded text-primary focus:ring-primary" value="Van" checked> <span class="text-sm">Van / Minibus</span></label>
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-type rounded text-primary focus:ring-primary" value="Bike" checked> <span class="text-sm">Motorcycle</span></label>
+                        <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-type rounded text-primary focus:ring-primary" value="Scooter" checked> <span class="text-sm">Scooter</span></label>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100 dark:border-gray-800 my-4">
+
+                <div class="mb-6">
+                    <label class="text-sm font-bold mb-3 block">Seating Capacity</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="filter-seat px-3 py-1.5 rounded-md border border-gray-200 text-xs font-semibold hover:border-primary hover:text-primary transition-all active-seat bg-primary/10 border-primary text-primary" data-val="2">2</button>
+                        <button class="filter-seat px-3 py-1.5 rounded-md border border-gray-200 text-xs font-semibold hover:border-primary hover:text-primary transition-all" data-val="4">4</button>
+                        <button class="filter-seat px-3 py-1.5 rounded-md border border-gray-200 text-xs font-semibold hover:border-primary hover:text-primary transition-all" data-val="5">5</button>
+                        <button class="filter-seat px-3 py-1.5 rounded-md border border-gray-200 text-xs font-semibold hover:border-primary hover:text-primary transition-all" data-val="7">7</button>
+                        <button class="filter-seat px-3 py-1.5 rounded-md border border-gray-200 text-xs font-semibold hover:border-primary hover:text-primary transition-all" data-val="10+">10+</button>
+                    </div>
+                </div>
+
+                <hr class="border-gray-100 dark:border-gray-800 my-4">
+
+                <div class="mb-6">
+                    <label class="text-sm font-bold mb-3 block">Fuel Type</label>
+                    <div class="flex flex-wrap gap-2">
+                        <button class="filter-fuel px-3 py-1.5 rounded-md border border-gray-200 text-xs font-semibold hover:border-primary hover:text-primary transition-all active-fuel bg-primary/10 border-primary text-primary" data-val="Petrol">Petrol</button>
+                        <button class="filter-fuel px-3 py-1.5 rounded-md border border-gray-200 text-xs font-semibold hover:border-primary hover:text-primary transition-all" data-val="Diesel">Diesel</button>
+                        <button class="filter-fuel px-3 py-1.5 rounded-md border border-gray-200 text-xs font-semibold hover:border-primary hover:text-primary transition-all" data-val="Electric">Electric</button>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="text-sm font-bold mb-3 block">Transmission</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="trans" value="Any" checked class="text-primary focus:ring-primary"> <span class="text-sm">Any</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="trans" value="Manual" class="text-primary focus:ring-primary"> <span class="text-sm">Manual</span></label>
+                        <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="trans" value="Automatic" class="text-primary focus:ring-primary"> <span class="text-sm">Auto</span></label>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-1">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg"><span id="resultCount">0</span> Available Vehicles</h3>
+                <select id="sortSelect" onchange="renderVehicles()" class="bg-transparent text-sm font-semibold text-gray-500 border-none focus:ring-0 cursor-pointer">
+                    <option value="low">Price: Low to High</option>
+                    <option value="high">Price: High to Low</option>
+                    <option value="rating">Top Rated</option>
+                </select>
+            </div>
+            
+            <div id="vehicleList" class="grid grid-cols-1 gap-4">
+                </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    // --- Mock Data ---
+   const locations = [
+        { main: "Vijayawada", sub: "All boarding points" },
+        { main: "Pandit Nehru Bus Station (PNBS)", sub: "Vijayawada" },
+        { main: "Benz Circle", sub: "Vijayawada" },
+        { main: "Ramavarappadu Ring", sub: "Vijayawada" },
+        { main: "Gollapudi", sub: "Vijayawada" },
+        { main: "Mangalagiri Bypass", sub: "Vijayawada" },
+        { main: "NTR Circle", sub: "Vijayawada" },
+        { main: "Bhavanipuram", sub: "Vijayawada" },
+        { main: "Gannavaram", sub: "Vijayawada" }
+    ];
+
+    const vehicles = [
+        // --- City Cabs ---
+        { id: 1, name: "Maruti Swift Dzire", category: "cab", type: "Sedan", fuel: "Diesel", trans: "Manual", seats: 4, price: 1200, rating: 4.5, img: "https://th.bing.com/th/id/OIP.OJTZ2Mf3KlzIPaoqMAcn_QHaEb?w=382&h=190&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 2, name: "Toyota Etios", category: "cab", type: "Sedan", fuel: "CNG", trans: "Manual", seats: 4, price: 1100, rating: 4.3, img: "https://th.bing.com/th/id/OIP.D7BlX4uc3ARUf8gZ85pZNgHaEK?w=295&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 3, name: "Toyota Innova Crysta", category: "cab", type: "SUV", fuel: "Diesel", trans: "Manual", seats: 7, price: 2500, rating: 4.8, img: "https://th.bing.com/th/id/OIP.8jVlMd4hVfTHfQEiFSC9mQHaEe?w=275&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 12, name: "Maruti Ertiga", category: "cab", type: "SUV", fuel: "CNG", trans: "Manual", seats: 7, price: 1800, rating: 4.4, img: "https://th.bing.com/th/id/OIP.BZaJoWB_MajM_LrGNIIjiAHaE4?w=315&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 13, name: "Hyundai Aura", category: "cab", type: "Sedan", fuel: "Petrol", trans: "Manual", seats: 4, price: 1150, rating: 4.2, img: "https://th.bing.com/th/id/OIP.rsHYl_C0BH0jNSzFLsHJNwHaEK?w=309&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+
+        // --- Self Drive ---
+        { id: 4, name: "Hyundai Creta", category: "self-drive", type: "SUV", fuel: "Petrol", trans: "Automatic", seats: 5, price: 3500, rating: 4.7, img: "https://th.bing.com/th/id/OIP.InjBefXJrkgQu2NSBvblhgHaEK?w=276&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 5, name: "Mahindra Thar 4x4", category: "self-drive", type: "SUV", fuel: "Diesel", trans: "Manual", seats: 4, price: 4500, rating: 4.9, img:"https://th.bing.com/th/id/OIP.zFmjNk9oxjdk0QAJrpxSHwHaEo?w=262&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 6, name: "Tata Nexon EV", category: "self-drive", type: "SUV", fuel: "Electric", trans: "Automatic", seats: 5, price: 2800, rating: 4.6, img: "https://th.bing.com/th/id/OIP.tE0v_mFqD9Of-ZP5lIqHRAHaE6?w=280&h=185&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 14, name: "Maruti Swift", category: "self-drive", type: "Hatchback", fuel: "Petrol", trans: "Manual", seats: 4, price: 2000, rating: 4.5, img: "https://th.bing.com/th/id/OIP.f3QYtgyrUeSqjnV5nYdMBQHaEK?w=319&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 15, name: "Mahindra Scorpio N", category: "self-drive", type: "SUV", fuel: "Diesel", trans: "Automatic", seats: 7, price: 5000, rating: 4.9, img:"https://th.bing.com/th/id/OIP.QtTuEfkPEHXtGjV__hDwzQHaD4?w=325&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 16, name: "Mahindra XUV700", category: "self-drive", type:"SUV", fuel:"Petrol" , trans:"Automatic" , seats:"7" , price:"55" , rating:"4.8" , img:"https://th.bing.com/th/id/OIP.y1Md2FpPHjqjLfszk4uejgHaE8?w=291&h=194&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+
+        // --- Bikes ---
+        { id: 7, name: "Royal Enfield Classic 350", category: "bike", type: "Bike", fuel: "Petrol", trans: "Manual", seats: 2, price: 800, rating: 4.8, img: "https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=1000&auto=format&fit=crop" },
+        { id: 8, name: "Honda Activa 6G", category: "bike", type: "Scooter", fuel: "Petrol", trans: "Automatic", seats: 2, price: 400, rating: 4.2, img: "https://th.bing.com/th/id/OIP.laDelRFLtmKA7wj17OhyugHaE8?w=239&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 9, name: "KTM Duke 390", category: "bike", type: "Bike", fuel: "Petrol", trans: "Manual", seats: 2, price: 1500, rating: 4.9, img: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1000&auto=format&fit=crop" },
+        { id: 17, name: "Yamaha R15 V4", category: "bike", type: "Bike", fuel: "Petrol", trans: "Manual", seats: 2, price: 1000, rating: 4.7, img: "https://th.bing.com/th/id/OIP.RjiVEynjS_jJt0h2PPP1MQHaE7?w=274&h=182&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 18, name: "TVS Jupiter", category: "bike", type: "Scooter", fuel: "Petrol", trans: "Automatic", seats: 2, price: 450, rating: 4.3, img: "https://th.bing.com/th/id/OIP.RanLyrc3Q4-E3rfji95pfQHaEV?w=299&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 19, name: "Hero Splendor+", category: "bike", type: "Bike", fuel: "Petrol", trans: "Manual", seats: 2, price: 350, rating: 4.1, img: "https://th.bing.com/th/id/OIP.YdboazSOo1i-IIQ2_xlHKAHaE8?w=263&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+
+        // --- Vans ---
+        { id: 10, name: "Force Traveler (12 Str)", category: "van", type: "Van", fuel: "Diesel", trans: "Manual", seats: 12, price: 4500, rating: 4.4, img: "https://th.bing.com/th/id/OIP.js7FWf4hbcLngZG2PE2_bQHaFF?w=230&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 11, name: "Kia Carnival", category: "van", type: "Van", fuel: "Diesel", trans: "Automatic", seats: 9, price: 6000, rating: 4.9, img: "https://th.bing.com/th/id/OIP.h5zPYizJsz0XpTASZNGNoAHaEK?w=294&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 20, name: "Force Urbania (17 Str)", category: "van", type: "Van", fuel: "Diesel", trans: "Manual", seats: 17, price: 8000, rating: 4.8, img: "https://th.bing.com/th/id/OIP.gIsq_XuJlFC8kk1GPdfuMAHaF3?w=189&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" }
+    ];
+
+    // --- State ---
+    let currentCategory = 'cab';
+    let activeFuel = ['Petrol', 'Diesel', 'Electric', 'CNG'];
+    let activeSeats = []; // e.g. [2, 4, 7]
+
+    // --- UI Interactions ---
+
+    // 1. Location Autocomplete
+    function showSuggestions(input, listId) {
+        const val = input.value.toLowerCase();
+        const list = document.getElementById(listId);
+        
+        if(val.length < 1) {
+            list.classList.add('hidden');
+            return;
+        }
+
+        const filtered = locations.filter(l => l.main.toLowerCase().includes(val));
+        
+        if(filtered.length > 0) {
+            list.innerHTML = filtered.map(l => `
+                <div onclick="selectLocation('${l.main}', '${listId}', '${input.id}')" class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer border-b border-gray-50 dark:border-gray-700 last:border-none flex items-center gap-3">
+                    <div class="bg-gray-100 dark:bg-gray-700 p-2 rounded-full">
+                        <span class="material-symbols-outlined text-gray-500 text-sm">${l.main.includes('Bus') ? 'directions_bus' : 'location_on'}</span>
+                    </div>
+                    <div>
+                        <div class="font-bold text-sm text-gray-800 dark:text-gray-200">${l.main.replace(new RegExp(val, 'gi'), match => `<span class="text-primary">${match}</span>`)}</div>
+                        <div class="text-xs text-gray-500">${l.sub}</div>
+                    </div>
+                </div>
+            `).join('');
+            list.classList.remove('hidden');
+        } else {
+            list.classList.add('hidden');
+        }
+    }
+
+    function selectLocation(val, listId, inputId) {
+        document.getElementById(inputId).value = val;
+        document.getElementById(listId).classList.add('hidden');
+    }
+
+    function closeAllDropdowns() {
+        // Close dropdown if clicking outside
+        if(!event.target.closest('.group')) {
+            document.getElementById('pickup-list').classList.add('hidden');
+        }
+    }
+
+    // 2. Tab & Filter Logic
+    function filterCategory(cat) {
+        currentCategory = cat;
+        // Update Tab UI
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active-tab', 'text-primary');
+            btn.classList.add('text-gray-500');
+        });
+        event.currentTarget.classList.add('active-tab');
+        event.currentTarget.classList.remove('text-gray-500');
+        renderVehicles();
+    }
+
+    // Fuel Listeners
+    document.querySelectorAll('.filter-fuel').forEach(btn => {
+        btn.addEventListener('click', () => {
+            toggleFilterBtn(btn, activeFuel, ['Petrol', 'Diesel', 'Electric', 'CNG']);
+        });
+    });
+
+    // Seat Listeners
+    document.querySelectorAll('.filter-seat').forEach(btn => {
+        btn.addEventListener('click', () => {
+             // Logic: If list is empty, adding one makes it specific.
+            const val = btn.dataset.val;
+            
+            // Toggle Visuals
+            btn.classList.toggle('active-seat');
+            btn.classList.toggle('bg-primary/10');
+            btn.classList.toggle('border-primary');
+            btn.classList.toggle('text-primary');
+
+            // Toggle Data
+            if(activeSeats.includes(val)) {
+                activeSeats = activeSeats.filter(s => s !== val);
+            } else {
+                activeSeats.push(val);
+            }
+            renderVehicles();
+        });
+    });
+
+    function toggleFilterBtn(btn, arr, defaultArr) {
+        btn.classList.toggle('active-fuel');
+        btn.classList.toggle('bg-primary/10');
+        btn.classList.toggle('border-primary');
+        btn.classList.toggle('text-primary');
+        
+        const val = btn.dataset.val;
+        if(arr.includes(val)) {
+            // Remove
+            const index = arr.indexOf(val);
+            if (index > -1) arr.splice(index, 1);
+        } else {
+            arr.push(val);
+        }
+        // If empty, reset to all
+        if(arr.length === 0) {
+            // This is a reference issue in JS, better to just check length in render
+        }
+        renderVehicles();
+    }
+
+    // Input Listeners
+    document.getElementById('priceRange').addEventListener('input', (e) => {
+        document.getElementById('priceVal').innerText = `₹${e.target.value}`;
+        renderVehicles();
+    });
+    document.querySelectorAll('.filter-type, input[name="trans"]').forEach(el => {
+        el.addEventListener('change', renderVehicles);
+    });
+
+    // 3. Render Logic
+    function calculateTotal(basePrice) {
+        // Assume 1 day if date not picked for demo
+        let days = 1;
+        const subTotal = basePrice * days;
+        const gst = subTotal * 0.18;
+        return Math.round(subTotal + gst);
+    }
+
+    function bookVehicle(price) {
+        const total = calculateTotal(price);
+        // Redirect to payment.html with amount
+        window.location.href = `payment.html?amount=${total}`;
+    }
+
+    function resetFilters() {
+        document.getElementById('priceRange').value = 15000;
+        document.getElementById('priceVal').innerText = "₹15,000+";
+        document.querySelectorAll('.filter-type').forEach(c => c.checked = true);
+        document.querySelector('input[name="trans"][value="Any"]').checked = true;
+        // Reset Custom buttons manually if needed
+        renderVehicles();
+    }
+
+    function renderVehicles() {
+        const list = document.getElementById('vehicleList');
+        list.innerHTML = '';
+
+        // Get Filter Values
+        const maxPrice = parseInt(document.getElementById('priceRange').value);
+        const checkedTypes = Array.from(document.querySelectorAll('.filter-type:checked')).map(cb => cb.value);
+        const transVal = document.querySelector('input[name="trans"]:checked').value;
+        const sortVal = document.getElementById('sortSelect').value;
+
+        // Effective Fuel Array (if none selected, assume all)
+        const effectiveFuel = document.querySelectorAll('.active-fuel').length > 0 ? activeFuel : ['Petrol', 'Diesel', 'Electric', 'CNG'];
+
+        // Filter Data
+        let filtered = vehicles.filter(v => {
+            // 1. Category
+            if(v.category !== currentCategory) return false;
+            
+            // 2. Price
+            if(v.price > maxPrice) return false;
+            
+            // 3. Type (Checkbox)
+            if(!checkedTypes.includes(v.type)) return false;
+            
+            // 4. Transmission
+            if(transVal !== 'Any' && v.trans !== transVal) return false;
+            
+            // 5. Fuel
+            if(!effectiveFuel.includes(v.fuel) && !(v.fuel === 'CNG' && effectiveFuel.includes('Petrol'))) return false;
+
+            // 6. Seats (Only if specific seats selected)
+            if(activeSeats.length > 0) {
+                // Logic: 10+ handles vans
+                const isTenPlus = activeSeats.includes('10+') && v.seats >= 10;
+                const isExact = activeSeats.includes(v.seats.toString());
+                if(!isTenPlus && !isExact) return false;
+            }
+
+            return true;
+        });
+
+        // Sort Data
+        if(sortVal === 'low') filtered.sort((a,b) => a.price - b.price);
+        if(sortVal === 'high') filtered.sort((a,b) => b.price - a.price);
+        if(sortVal === 'rating') filtered.sort((a,b) => b.rating - a.rating);
+
+        document.getElementById('resultCount').innerText = filtered.length;
+
+        if(filtered.length === 0) {
+            list.innerHTML = `
+                <div class="flex flex-col items-center justify-center p-10 text-center text-gray-500 bg-white dark:bg-gray-900 rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+                    
+                    <p>No vehicles found matching your filters.</p>
+                    <button onclick="resetFilters()" class="text-primary font-bold text-sm mt-2 hover:underline">Clear Filters</button>
+                </div>`;
+            return;
+        }
+
+        // Generate Cards
+        filtered.forEach(v => {
+            const totalPrice = calculateTotal(v.price);
+            
+            const card = document.createElement('div');
+            card.className = "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row group";
+            
+            card.innerHTML = `
+                <div class="w-full md:w-72 h-48 bg-gray-50 dark:bg-gray-800 flex items-center justify-center p-4 relative overflow-hidden">
+                    <img src="${v.img}" class="w-full h-full object-contain mix-blend-multiply dark:mix-blend-normal transform group-hover:scale-110 transition-transform duration-500" alt="${v.name}">
+                    <div class="absolute top-3 left-3 bg-white/90 dark:bg-black/60 backdrop-blur px-2 py-1 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm">
+                        <span class="material-symbols-outlined text-yellow-500 text-sm">star</span> ${v.rating}
+                    </div>
+                    ${v.fuel === 'Electric' ? '<div class="absolute top-3 right-3 bg-green-100 text-green-700 px-2 py-1 rounded-md text-xs font-bold shadow-sm">EV</div>' : ''}
+                </div>
+                <div class="flex-1 p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-start">
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">${v.name}</h4>
+                            <span class="bg-blue-50 dark:bg-blue-900/30 text-primary dark:text-blue-300 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider border border-blue-100 dark:border-blue-800">${v.type}</span>
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span class="chip"><span class="material-symbols-outlined text-[16px]"></span> ${v.trans}</span>
+                            <span class="chip"><span class="material-symbols-outlined text-[16px]"></span> ${v.fuel}</span>
+                            <span class="chip"><span class="material-symbols-outlined text-[16px]"></span> ${v.seats} Seats</span>
+                        </div>
+                        
+                        <div class="mt-4 flex gap-4 text-xs text-gray-500 font-medium">
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="w-full md:w-60 border-l border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/30 p-5 flex flex-col justify-center items-end">
+                    <p class="text-gray-400 text-xs line-through">₹${Math.round(v.price * 1.3)}</p>
+                    <div class="flex items-baseline gap-1">
+                        <p class="text-2xl font-bold text-gray-900 dark:text-white">₹${v.price}</p>
+                        <span class="text-xs font-normal text-gray-500">/day</span>
+                    </div>
+                    <p class="text-[10px] text-gray-500 font-medium mb-4 text-right">Total approx ₹${totalPrice} (incl. GST)</p>
+                    <button onclick="bookVehicle(${v.price})" class="w-full bg-primary hover:bg-blue-600 text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-500/20 transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                        Book Now 
+                    </button>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    // Initialize
+    renderVehicles();
+
+    // Style Helper for Chip
+    const style = document.createElement('style');
+    style.innerHTML = `
+        .chip { display: inline-flex; align-items: center; gap: 4px; background: #f3f4f6; color: #4b5563; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; border: 1px solid #e5e7eb; }
+        .dark .chip { background: #1f2937; color: #d1d5db; border-color: #374151; }
+    `;
+    document.head.appendChild(style);
+
+</script>
+</body>
+</html>
