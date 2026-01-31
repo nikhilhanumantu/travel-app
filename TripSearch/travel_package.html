@@ -313,26 +313,24 @@
         }
 
         if (!date) {
-        setError(dateInput, dateError, true);
-        hasError = true;
-}       else {
-        const today = new Date();
-        today.setHours(0,0,0,0);
-        const selectedDate = new Date(date);
-                if (selectedDate < today) {
-          dateError.textContent = "Date cannot be in the past.";
-          dateError.classList.remove("hidden");
-          dateInput.classList.add("border-red-500");
+          setError(dateInput, dateError, true);
           hasError = true;
         } else {
-          setError(dateInput, dateError, false);
+          const today = new Date();
+          today.setHours(0,0,0,0);
+          const selectedDate = new Date(date);
+          if (selectedDate < today) {
+            dateError.textContent = "Date cannot be in the past.";
+            dateError.classList.remove("hidden");
+            dateInput.classList.add("border-red-500");
+            hasError = true;
+          } else {
+            setError(dateInput, dateError, false);
+          }
         }
-      }
 
+        if (hasError) return;
 
-        if (hasError) return; // stop here, do not go to results.html
-
-        // all good → build URL and go to results.html
         let dateSearched = "";
         if (date) {
           const [y, m, d] = date.split("-");
@@ -342,8 +340,6 @@
         const totalRooms = rooms.length || 1;
         const roomsParam = `${totalRooms},0,0,0,,,`;
 
-
-
         const params = new URLSearchParams();
         params.set("fromSearchWidget", "true");
         params.set("searchDep", from || "");
@@ -351,7 +347,7 @@
         params.set("destValue", to || "");
         params.set("depCity", from || "");
         params.set("initd", "searchwidget_landing_custom_notheme");
-        params.set("dateSearched",dateSearched);
+        params.set("dateSearched", dateSearched);
         params.set("glp", "true");
         params.set("pdo", "true");
         params.set("rooms", roomsParam);
@@ -360,6 +356,16 @@
         const url = "results.html?" + params.toString();
         window.location.href = url;
       });
+
+      // NEW: read ?dest=... from URL and fix destination field
+      const urlParams = new URLSearchParams(window.location.search);
+      const destParam = urlParams.get("dest") || "";
+      if (destParam) {
+        const toInputEl = document.getElementById("to-input");
+        if (toInputEl) {
+          toInputEl.value = destParam;
+        }
+      }
     });
   </script>
 
