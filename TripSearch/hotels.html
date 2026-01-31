@@ -59,7 +59,7 @@
                         <p class="text-sm font-bold px-1 dark:text-gray-300">Location</p>
                         <div class="relative">
                             <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary">location_on</span>
-                            <input id="loc-search" type="text" class="w-full h-14 pl-12 pr-4 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none" placeholder="Search India, Goa, Delhi...">
+                            <input id="loc-search" type="text" class="w-full h-14 pl-12 pr-4 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none" placeholder="Search Manali, Goa, Kerala...">
                         </div>
                     </div>
 
@@ -109,7 +109,7 @@
             </div>
 
             <div class="flex items-center justify-between">
-                <p id="counter-text" class="text-lg font-bold dark:text-white">4 hostels found</p>
+                <p id="counter-text" class="text-lg font-bold dark:text-white">Searching...</p>
                 <select onchange="sortHostels(this.value)" class="bg-transparent border-none font-bold text-primary cursor-pointer outline-none">
                     <option value="rec">Recommended</option>
                     <option value="low">Price: Low to High</option>
@@ -130,52 +130,130 @@
 </div>
 
 <script>
+    // --- Massive Data Set of Hotels in India ---
     const allHostels = [
-        { id: 1, name: "Zostel Goa (Anjuna)", location: "Goa", price: 850, rate: 4.8, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1555854817-5b2260d1bd63?w=800" },
-        { id: 2, name: "The Hosteller Vagator", location: "Goa", price: 620, rate: 4.5, wifi: true, pool: true, img: "https://images.unsplash.com/photo-1590644365607-1c5a519a7a37?w=800" },
-        { id: 3, name: "Moustache Jaipur", location: "Jaipur", price: 599, rate: 4.7, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1544161515-436cefd54c3e?w=800" },
-        { id: 4, name: "Madpackers Delhi", location: "Delhi", price: 1100, rate: 4.9, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800" },
-        { id: 5, name: "Joey's Mumbai", location: "Mumbai", price: 950, rate: 4.6, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=800" },
-        { id: 6, name: "Live Free Rishikesh", location: "Rishikesh", price: 750, rate: 4.9, wifi: true, pool: true, img: "https://images.unsplash.com/photo-1623625434462-e5e42318ae49?w=800" }
+        // GOA
+        { id: 1, name: "Zostel Goa (Anjuna)", location: "Goa", price: 850, rate: 4.8, wifi: true, pool: false, img: "https://th.bing.com/th/id/OIP.Az4Jsk3q8KHBshcBUZPM1QHaE8?w=277&h=184&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 2, name: "The Hosteller Vagator", location: "Goa", price: 620, rate: 4.5, wifi: true, pool: true, img: "data:image/webp;base64,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" },
+        { id: 3, name: "Whostel Goa", location: "Goa", price: 700, rate: 4.6, wifi: true, pool: true, img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800" },
+        
+        // MANALI / HIMACHAL
+        { id: 4, name: "The Culture Nation Hostel", location: "Manali", price: 550, rate: 4.9, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1605640840605-14ac1855827b?w=800" },
+        { id: 5, name: "Zostel Old Manali", location: "Manali", price: 900, rate: 4.8, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800" },
+        { id: 6, name: "Madpackers Manali", location: "Manali", price: 650, rate: 4.7, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1518733057094-95b53143d2a7?w=800" },
+        { id: 7, name: "Alt Life - Dharamkot", location: "McLeod Ganj", price: 750, rate: 4.8, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=800" },
+        { id: 8, name: "The Hosteller Kasol", location: "Kasol", price: 800, rate: 4.6, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=800" },
+
+        // RAJASTHAN
+        { id: 9, name: "Moustache Jaipur", location: "Jaipur", price: 599, rate: 4.7, wifi: true, pool: true, img: "https://th.bing.com/th/id/OIP.TUutzObaDN3-jZlbKKmNtwHaD4?w=294&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 10, name: "Zostel Udaipur", location: "Udaipur", price: 850, rate: 4.9, wifi: true, pool: true, img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800" },
+        { id: 11, name: "The Hosteller Jaisalmer", location: "Jaisalmer", price: 500, rate: 4.6, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800" },
+        { id: 12, name: "Blue City Hostel", location: "Jodhpur", price: 450, rate: 4.5, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?w=800" },
+
+        //MUMBAI
+        { id: 22, name: "Bunk Stay Hostel", location: "Mumbai", price: 600, rate: 4.4, wifi: true, pool: false, img: "https://th.bing.com/th/id/OIP.ziOPQQA5sylJlG4wfZSssAHaE7?w=323&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+{ id: 23, name: "Bombay Backpackers", location: "Mumbai", price: 550, rate: 4.2, wifi: true, pool: false, img: "https://th.bing.com/th/id/OIP.MpfHt0Mevs-go_psE61IUwHaE8?w=254&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+
+
+// MYSORE
+{ id: 24, name: "Palace View Hostel", location: "Mysore", price: 500, rate: 4.5, wifi: true, pool: false, img: "https://th.bing.com/th/id/OIP.IVZ7RlBxK60aruhnXCQM5wHaFj?w=265&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+
+//PONDICHERRY
+{ id: 19, name: "French Quarter Hostel", location: "Pondicherry", price: 700, rate: 4.8, wifi: true, pool: true, img: "https://th.bing.com/th/id/OIP.7oV-KZIHOBhycL52pIVgMwHaEB?w=321&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+
+
+//VIJAYAWADA
+
+{ id: 35, name: "Novotel Vijayawada Varun", location: "Vijayawada", price: 3500, rate: 4.5, wifi: true, pool: true, img: "https://th.bing.com/th/id/OIP.q974NOfn6-yJdgD0Pg-WowHaE8?w=298&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+
+
+ //VISHAKHAPATNAM
+{ id: 37, name: "Hotel Vishakapatnam", location: "Vishakapatnam", price: 900, rate: 4.1, wifi: true, pool: false, img: "https://th.bing.com/th/id/OIP.7oV-KZIHOBhycL52pIVgMwHaEB?w=321&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+{ id: 39, name: "Novotel Vishakapatnam", location: "Vishakapatnam", price: 2500, rate: 4.6, wifi: true, pool: true, img: "https://th.bing.com/th/id/OIP.q974NOfn6-yJdgD0Pg-WowHaE8?w=298&h=199&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+{ id: 40, name: "Brahmin's Inn Vishakapatnam", location: "Vishakapatnam", price: 800, rate: 4.0, wifi: true, pool: false, img: "https://th.bing.com/th/id/OIP.R73ylArn6RtCHEL-khlqCAHaFt?w=222&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        // KERALA
+        { id: 13, name: "Zostel Varkala", location: "Varkala", price: 950, rate: 4.8, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800" },
+        { id: 14, name: "The Lost Hostel", location: "Munnar", price: 700, rate: 4.7, wifi: true, pool: false, img: "https://th.bing.com/th/id/OIP.uYVkmpzB7YWnh_xci_YBFAHaD9?w=286&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 15, name: "Happy Camper", location: "Kochi", price: 600, rate: 4.5, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800" },
+
+        // SOUTH INDIA (Coorg, Ooty, Hampi, Pondicherry)
+        { id: 16, name: "Zostel Coorg", location: "Coorg", price: 1100, rate: 4.8, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800" },
+        { id: 17, name: "The Hosteller Ooty", location: "Ooty", price: 950, rate: 4.6, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=800" },
+        { id: 18, name: "Evolve Back", location: "Hampi", price: 1500, rate: 4.9, wifi: true, pool: true, img: "https://th.bing.com/th/id/OIP.k6GnHry7Tx0iCzIeuGVfxwHaEL?w=316&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" },
+        { id: 19, name: "Micasa Hostel", location: "Pondicherry", price: 850, rate: 4.7, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=800" },
+
+        // METROS & SPIRITUAL
+        { id: 20, name: "Madpackers Delhi", location: "Delhi", price: 1100, rate: 4.9, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800" },
+        { id: 21, name: "Joey's Mumbai", location: "Mumbai", price: 1050, rate: 4.7, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=800" },
+        { id: 22, name: "Live Free Rishikesh", location: "Rishikesh", price: 750, rate: 4.9, wifi: true, pool: true, img: "https://images.unsplash.com/photo-1623625434462-e5e42318ae49?w=800" },
+        { id: 23, name: "International Travellers' Hostel", location: "Varanasi", price: 600, rate: 4.6, wifi: true, pool: false, img: "https://images.unsplash.com/photo-1565329921943-7e537b7a2ea9?w=800" }
     ];
 
-    let displayedHostels = allHostels.slice(0, 4);
+    let displayedHostels = allHostels.slice(0, 6); // Load first 6 initially
     let activeFilters = { wifi: false, top: false, pool: false };
     let guests = { adult: 1, child: 0 };
+
+    function viewHotel(id) {
+        const hotel = allHostels.find(h => h.id === id);
+        if(!hotel) return;
+        
+        // Build URL parameters
+        const params = new URLSearchParams({
+            name: hotel.name,
+            location: hotel.location,
+            price: hotel.price,
+            img: hotel.img,
+            rate: hotel.rate,
+            wifi: hotel.wifi,
+            pool: hotel.pool
+        });
+        
+        window.location.href = `inhotel.html?${params.toString()}`;
+    }
 
     function renderHostels(data) {
         const container = document.getElementById('hostel-container');
         container.innerHTML = '';
-        data.forEach(h => {
-            container.innerHTML += `
-                <div class="hostel-card group flex flex-col md:flex-row bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-2xl transition-all duration-300">
-                    <div class="md:w-72 h-56 md:h-auto overflow-hidden relative">
-                        <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="${h.img}" alt="${h.name}">
-                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-                            <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
-                            <span class="text-sm font-bold">${h.rate}</span>
-                        </div>
-                    </div>
-                    <div class="flex-1 p-6 flex flex-col justify-between">
-                        <div>
-                            <div class="flex justify-between items-start">
-                                <h3 class="text-xl font-bold dark:text-white">${h.name}</h3>
-                                <span class="material-symbols-outlined text-gray-300 hover:text-red-500 cursor-pointer">favorite</span>
-                            </div>
-                            <p class="text-gray-500 text-sm flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-sm">location_on</span>${h.location}, India</p>
-                            <div class="flex gap-4 mt-4">
-                                ${h.wifi ? '<span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">Free Wi-Fi</span>' : ''}
-                                ${h.pool ? '<span class="text-xs bg-green-50 text-green-600 px-2 py-1 rounded">Pool</span>' : ''}
-                                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Locker</span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between mt-6 pt-4 border-t dark:border-gray-800">
-                            <div><span class="text-2xl font-black dark:text-white">₹${h.price}</span><span class="text-sm text-gray-500">/night</span></div>
-                            <button class="bg-primary text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] active:translate-y-0 transition-all">Book Now</button>
-                        </div>
-                    </div>
+        
+        if (data.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-10 opacity-60">
+                    <span class="material-symbols-outlined text-6xl mb-2">location_off</span>
+                    <p class="text-xl font-bold dark:text-white">No stays found</p>
+                    <p class="text-sm">Try adjusting your filters or location</p>
                 </div>`;
-        });
+        } else {
+            data.forEach(h => {
+                container.innerHTML += `
+                    <div class="hostel-card group flex flex-col md:flex-row bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden hover:shadow-2xl transition-all duration-300">
+                        <div class="md:w-72 h-56 md:h-auto overflow-hidden relative">
+                            <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="${h.img}" alt="${h.name}">
+                            <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                                <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                                <span class="text-sm font-bold">${h.rate}</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start">
+                                    <h3 class="text-xl font-bold dark:text-white">${h.name}</h3>
+                                    <span class="material-symbols-outlined text-gray-300 hover:text-red-500 cursor-pointer">favorite</span>
+                                </div>
+                                <p class="text-gray-500 text-sm flex items-center gap-1 mt-1"><span class="material-symbols-outlined text-sm">location_on</span>${h.location}, India</p>
+                                <div class="flex gap-4 mt-4">
+                                    ${h.wifi ? '<span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded">Free Wi-Fi</span>' : ''}
+                                    ${h.pool ? '<span class="text-xs bg-green-50 text-green-600 px-2 py-1 rounded">Pool</span>' : ''}
+                                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Locker</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between mt-6 pt-4 border-t dark:border-gray-800">
+                                <div><span class="text-2xl font-black dark:text-white">₹${h.price}</span><span class="text-sm text-gray-500">/night</span></div>
+                                <button onclick="viewHotel(${h.id})" class="bg-primary text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-primary/20 hover:translate-y-[-2px] active:translate-y-0 transition-all">Book Now</button>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
         document.getElementById('counter-text').innerText = `${data.length} hostels found`;
     }
 
@@ -213,18 +291,32 @@
             return matchLoc && matchWifi && matchTop && matchPool;
         });
         renderHostels(filtered);
-        document.getElementById('load-more-container').style.display = 'none';
+        
+        // Hide load more button if we are filtering or showing all results
+        const loadBtn = document.getElementById('load-more-container');
+        if (filtered.length > 6 && query === '' && !activeFilters.wifi && !activeFilters.top && !activeFilters.pool) {
+             // Logic can be improved, but for now hide when filtering
+             loadBtn.style.display = 'none'; 
+        } else {
+             loadBtn.style.display = 'none';
+        }
     }
 
     function sortHostels(val) {
-        let sorted = [...allHostels];
-        if (val === 'low') sorted.sort((a, b) => a.price - b.price);
-        if (val === 'high') sorted.sort((a, b) => b.price - a.price);
-        renderHostels(sorted);
+        let currentList = allHostels.slice(); // Copy full list for sorting
+        if (document.getElementById('loc-search').value) {
+             // If searching, sort the filtered list
+             const query = document.getElementById('loc-search').value.toLowerCase();
+             currentList = allHostels.filter(h => h.location.toLowerCase().includes(query) || h.name.toLowerCase().includes(query));
+        }
+
+        if (val === 'low') currentList.sort((a, b) => a.price - b.price);
+        if (val === 'high') currentList.sort((a, b) => b.price - a.price);
+        renderHostels(currentList);
     }
 
     function loadMore() {
-        renderHostels(allHostels);
+        renderHostels(allHostels); // Show everything
         document.getElementById('load-more-container').style.display = 'none';
     }
 
@@ -237,6 +329,11 @@
             document.getElementById('guest-dropdown').classList.add('hidden');
         }
     }
+
+    // Search input listener for real-time filtering
+    document.getElementById('loc-search').addEventListener('input', function() {
+        filterHostels();
+    });
 </script>
 </body>
 </html>
