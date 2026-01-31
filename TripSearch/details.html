@@ -301,8 +301,12 @@
       let daysLeft = null;
       if (startDate) {
         const today = new Date();
-        const diffMs = startDate.setHours(0,0,0,0) - today.setHours(0,0,0,0);
-        daysLeft = Math.round(diffMs / (1000 * 60 * 60 * 24)); // [web:154]
+        const s = new Date(startDate);
+        const t = new Date(today);
+        s.setHours(0,0,0,0);
+        t.setHours(0,0,0,0);
+        const diffMs = s - t;
+        daysLeft = Math.ceil(diffMs / (1000 * 60 * 60 * 24)); // [web:154]
       }
 
       function updateTransport(option) {
@@ -323,7 +327,6 @@
         } else if (option === "train") {
           if (within10Days) {
             price = Math.max(0, Math.round(basePrice * 0.7));
-            note = "Train quota not available within 10 days of travel. You can continue with bus or flight option.";
             desc =
               "Trains are not available for this route within 10 days of your selected date. " +
               "You can proceed with flight or bus option. If your dates are flexible, train availability will be checked on the payment page.";
