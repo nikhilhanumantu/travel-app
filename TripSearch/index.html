@@ -352,7 +352,7 @@
     // ******************************************************
     // 🔴 PASTE YOUR OPENROUTER API KEY BELOW
     // ******************************************************
-    const OPENROUTER_API_KEY = "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"; 
+    const OPENROUTER_API_KEY = "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"; 
     const MODEL_ID = "deepseek/deepseek-chat"; // DeepSeek V3
 
     function handleChat(e) {
@@ -436,7 +436,7 @@
             if (data.choices && data.choices[0].message.content) {
                 parseAndDisplayResponse(data.choices[0].message.content);
             } else {
-                document.getElementById('ai-text-content').innerHTML = "Sorry, DeepSeek didn't return a response.";
+                document.getElementById('ai-text-content').innerHTML = "Sorry, GoBuddy didn't return a response.";
             }
         } catch (error) {
             console.error("Error:", error);
