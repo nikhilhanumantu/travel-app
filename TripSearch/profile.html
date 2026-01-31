@@ -43,7 +43,19 @@
         .rotated { transform: rotate(180deg); }
     </style>
 </head>
-<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300 relative overflow-x-hidden">
+
+<div id="logout-toast" class="fixed top-6 right-6 z-[100] transform translate-x-[150%] transition-transform duration-500 ease-in-out">
+    <div class="bg-white dark:bg-slate-800 border-l-4 border-green-500 rounded-xl shadow-2xl p-4 flex items-center gap-4 min-w-[300px] border border-slate-100 dark:border-slate-700">
+        <div class="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 p-2 rounded-full">
+            <span class="material-icons-outlined text-xl">check_circle</span>
+        </div>
+        <div>
+            <h4 class="font-bold text-sm text-slate-800 dark:text-white">Success</h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Logged out successfully</p>
+        </div>
+    </div>
+</div>
 
 <input type="file" id="profile-upload" accept="image/*" class="hidden" onchange="previewImage(event)">
 
@@ -59,7 +71,7 @@
                     <span class="material-icons-outlined">notifications</span>
                 </button>
                 <div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
-                    <img id="avatar-header" alt="User avatar" class="w-full h-full object-cover" src="https://i.pravatar.cc/150?u=alex"/>
+                    <img id="avatar-header" alt="User avatar" class="w-full h-full object-cover" src="https://th.bing.com/th/id/OIP.n_qNHbNptQi-kGTQRFnmoAAAAA?w=177&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"/>
                 </div>
             </div>
         </div>
@@ -71,14 +83,14 @@
     <section class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center mb-8">
         <div class="relative mb-4 group">
             <div class="w-24 h-24 rounded-full overflow-hidden ring-4 ring-slate-50 dark:ring-slate-700 transition-all group-hover:ring-primary/30 shadow-xl">
-                <img id="avatar-main" alt="Alex Wanderlust" class="w-full h-full object-cover" src="https://i.pravatar.cc/150?u=alex"/>
+                <img id="avatar-main" alt="John Doe" class="w-full h-full object-cover" src="https://th.bing.com/th/id/OIP.n_qNHbNptQi-kGTQRFnmoAAAAA?w=177&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3"/>
             </div>
             <button onclick="document.getElementById('profile-upload').click()" class="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full border-2 border-white dark:border-slate-800 shadow-lg hover:scale-110 active:scale-95 transition-all">
                 <span class="material-icons-outlined text-[16px]">edit</span>
             </button>
         </div>
-        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Alex Wanderlust</h1>
-        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">alex.wanderlust@email.com</p>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">John Doe</h1>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">john.doe@email.com</p>
     </section>
 
     <section class="mb-8">
@@ -156,7 +168,7 @@
         </div>
     </section>
 
-    <button onclick="window.location.reload()" class="w-full py-4 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 font-semibold rounded-2xl border border-red-100 dark:border-red-900/30 flex items-center justify-center gap-2 hover:bg-red-100 dark:hover:bg-red-950/40 active:scale-95 transition-all mb-12">
+    <button onclick="performLogout()" class="w-full py-4 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 font-semibold rounded-2xl border border-red-100 dark:border-red-900/30 flex items-center justify-center gap-2 hover:bg-red-100 dark:hover:bg-red-950/40 active:scale-95 transition-all mb-12">
         <span class="material-icons-outlined">logout</span> Logout
     </button>
 </main>
@@ -173,12 +185,9 @@
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                // Update the main profile picture
                 document.getElementById('avatar-main').src = e.target.result;
-                // Update the header small avatar
                 document.getElementById('avatar-header').src = e.target.result;
                 
-                // Optional: Animation feedback
                 document.getElementById('avatar-main').parentElement.classList.add('scale-105');
                 setTimeout(() => {
                     document.getElementById('avatar-main').parentElement.classList.remove('scale-105');
@@ -214,6 +223,21 @@
         document.getElementById('tab-past').className = !isUpcoming 
             ? "pb-2 text-sm font-semibold text-primary border-b-2 border-primary transition-all"
             : "pb-2 text-sm font-medium text-slate-400 hover:text-slate-600 transition-all";
+    }
+
+    // 5. NEW: LOGOUT LOGIC
+    function performLogout() {
+        // Get the toast element
+        const toast = document.getElementById('logout-toast');
+        
+        // Slide it into view by removing the translation
+        toast.classList.remove('translate-x-[150%]');
+        toast.classList.add('translate-x-0');
+
+        // Wait 1.5 seconds so the user can read the message, then redirect
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 1500);
     }
 </script>
 
