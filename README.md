@@ -70,3 +70,55 @@ url: https://superb-cocada-7a2663.netlify.app/login.html
 ---
 
 ## 📂 Project Structure
+
+TravelEase/
+│
+├── index.html
+├── login.html
+├── register.html
+├── packages.html
+├── cabs.html
+│
+├── assets/
+│ ├── images/
+│ ├── icons/
+│
+├── css/
+│ └── styles.css
+│
+├── js/
+│ ├── auth.js
+│ ├── search.js
+│ ├── packages.js
+│ ├── cabs.js
+│
+└── README.md
+
+
+
+---
+
+
+## 🔑 API Keys & Security
+
+
+- API keys (maps, AI, email services) **should NOT be hardcoded**
+- Use:
+  - `.env` files
+  - Environment variables
+- Never push secrets to GitHub
+
+
+---
+
+
+## 🧪 How to Run Locally
+
+
+1. Clone the repository:
+  
+Open the project folder:
+
+cd TravelEase
+
+Run using Live Server or open index.html directly in browser.
