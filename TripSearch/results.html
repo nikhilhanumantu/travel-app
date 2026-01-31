@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <title>Holiday Results</title>
+</head>
+<body class="bg-[#f5f7f8] font-display text-[#111418]">
+  <!-- Top bar -->
+  <header class="w-full border-b border-[#dbe0e6] bg-white">
+    <div class="mx-auto max-w-[1200px] flex items-center justify-between px-6 md:px-8 py-3">
+      <div class="flex items-center gap-2">
+        <div class="size-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+          <span class="text-xs font-bold">AI</span>
+        </div>
+        <div>
+          <p class="text-[11px] uppercase tracking-[0.18em] text-gray-400">Smart Holidays</p>
+          <h1 class="text-base md:text-lg font-semibold">TravelAI Packages</h1>
+        </div>
+      </div>
+      <a href="travel_package.html"
+         class="text-xs md:text-sm px-3 py-1.5 rounded-full border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition">
+        Modify Search
+      </a>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[1200px] px-6 md:px-8 py-6 md:py-8 space-y-6">
+    <!-- Search summary -->
+    <section>
+      <div class="bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm">
+        <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-gray-500 mb-2">
+          Your trip
+        </p>
+        <div id="summary" class="text-sm space-y-1.5"></div>
+      </div>
+    </section>
+
+    <!-- Category pills -->
+    <section class="bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm">
+      <div class="flex items-center justify-between mb-3 md:mb-4">
+        <h2 class="text-base md:text-lg font-semibold">Curated packages</h2>
+        <p class="text-[11px] text-gray-500 hidden md:block">
+          Filter by theme: Honeymoon, Family, Adventure and more
+        </p>
+      </div>
+
+      <div id="category-bar" class="flex flex-wrap gap-2 text-xs md:text-[13px]">
+        <!-- pills created by JS -->
+      </div>
+    </section>
+
+    <!-- Packages grid -->
+    <section class="bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm">
+      <div class="flex items-center justify-between mb-3">
+        <p id="result-count" class="text-xs text-gray-500"></p>
+        <p class="text-[11px] text-gray-400">Sample packages for presentation</p>
+      </div>
+      <div id="packages" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"></div>
+    </section>
+  </main>
+
+  <script>
+    function getParams() {
+      const p = new URLSearchParams(window.location.search);
+      return {
+        searchDep: p.get("searchDep") || "",
+        dest: p.get("dest") || "",
+        destValue: p.get("destValue") || "",
+        depCity: p.get("depCity") || "",
+        dateSearched: p.get("dateSearched") || "",
+        rooms: p.get("rooms") || "",
+      };
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const data = getParams();
+      const summary = document.getElementById("summary");
+      const packagesEl = document.getElementById("packages");
+      const categoryBar = document.getElementById("category-bar");
+      const resultCount = document.getElementById("result-count");
+
+      const destName = data.dest || data.searchDep || "your destination";
+
+      // parse rooms like "2,0,0,0,,," → "2"
+      const rawRooms = data.rooms || "";
+      const roomsCount = rawRooms ? rawRooms.split(",")[0] : "—";
+
+      // --- Summary text ---
+      summary.innerHTML = `
+        <p><span class="text-gray-500">From</span> <span class="font-semibold">${data.depCity || "—"}</span></p>
+        <p><span class="text-gray-500">To</span> <span class="font-semibold">${destName}</span></p>
+        <p><span class="text-gray-500">Date</span> <span class="font-semibold">${decodeURIComponent(data.dateSearched) || "Flexible"}</span></p>
+        <p><span class="text-gray-500">Rooms</span> <span class="font-semibold">${roomsCount}</span></p>
+      `;
+
+      // --- Fake package data with categories + image URLs ---
+      const baseName = destName[0].toUpperCase() + destName.slice(1);
+
+      const allPackages = [
+        {
+          name: `Honeymoon Bliss in ${baseName}`,
+          category: "Honeymoon",
+          nights: "5N / 6D",
+          includes: "4* Beach Resort, Candlelight Dinner, Cake, Room Décor",
+          price: "₹42,750",
+          tag: "Most Booked",
+          img: "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          name: `${baseName} Luxury Escape`,
+          category: "Luxury",
+          nights: "4N / 5D",
+          includes: "5* Resort, Flights, All Meals, Private Transfers",
+          price: "₹58,999",
+          tag: "Luxury",
+          img: "https://images.pexels.com/photos/2581540/pexels-photo-2581540.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          name: `Budget ${baseName} Getaway`,
+          category: "Budget",
+          nights: "3N / 4D",
+          includes: "3* Hotel, Breakfast, City Tour",
+          price: "₹18,499",
+          tag: "Value Deal",
+          img: "https://images.pexels.com/photos/753626/pexels-photo-753626.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          name: `Family Fun @ ${baseName}`,
+          category: "Family",
+          nights: "4N / 5D",
+          includes: "Kid‑friendly 4* Hotel, Breakfast & Dinner, Theme Park / Beaches",
+          price: "₹29,999",
+          tag: "Family Pick",
+          img: "https://images.pexels.com/photos/1430677/pexels-photo-1430677.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          name: `${baseName} Adventure Rush`,
+          category: "Adventure",
+          nights: "3N / 4D",
+          includes: "Water Sports / Trek, Local Transfers, Breakfast",
+          price: "₹24,750",
+          tag: "Thrill",
+          img: "https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          name: `Weekend in ${baseName}`,
+          category: "Weekend",
+          nights: "2N / 3D",
+          includes: "3* Hotel, Breakfast, Half‑day Sightseeing",
+          price: "₹13,750",
+          tag: "Short Break",
+          img: "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          name: `Workation in ${baseName}`,
+          category: "Workation",
+          nights: "7N / 8D",
+          includes: "Co‑working Friendly Stay, Wi‑Fi, Breakfast, Transfers",
+          price: "₹31,999",
+          tag: "Remote‑Work",
+          img: "https://images.pexels.com/photos/3861964/pexels-photo-3861964.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          name: `Premium Honeymoon – ${baseName}`,
+          category: "Honeymoon",
+          nights: "6N / 7D",
+          includes: "5* Private Pool Villa, Spa Session, Romantic Experiences",
+          price: "₹74,500",
+          tag: "Honeymoon",
+          img: "https://images.pexels.com/photos/1024984/pexels-photo-1024984.jpeg?auto=compress&cs=tinysrgb&w=800"
+        },
+        {
+          name: `${baseName} Friends & Fun`,
+          category: "Friends",
+          nights: "3N / 4D",
+          includes: "Party Hotel, Pub Crawl / Beach Night, Breakfast",
+          price: "₹22,999",
+          tag: "Friends",
+          img: "https://images.pexels.com/photos/1430677/pexels-photo-1430677.jpeg?auto=compress&cs=tinysrgb&w=800"
+        }
+      ];
+
+      const categories = ["All","Honeymoon","Family","Adventure","Budget","Weekend","Workation","Friends","Luxury"];
+
+      let currentCategory = "All";
+
+      // --- Render category pills ---
+      function renderCategories() {
+        categoryBar.innerHTML = "";
+        categories.forEach(cat => {
+          const btn = document.createElement("button");
+          const active = cat === currentCategory;
+          btn.textContent = cat;
+          btn.className =
+            "px-3 md:px-4 py-1.5 rounded-full border text-xs md:text-[13px] transition " +
+            (active
+              ? "bg-blue-500 text-white border-blue-500 shadow-sm"
+              : "border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-600");
+          btn.addEventListener("click", () => {
+            currentCategory = cat;
+            renderCategories();
+            renderPackages();
+          });
+          categoryBar.appendChild(btn);
+        });
+      }
+
+      // --- Render package cards: View details → details.html ---
+      function renderPackages() {
+        packagesEl.innerHTML = "";
+        const visible = currentCategory === "All"
+          ? allPackages
+          : allPackages.filter(p => p.category === currentCategory);
+
+        resultCount.textContent =
+          `${visible.length} package${visible.length > 1 ? "s" : ""} shown · Filter: ${currentCategory}`;
+
+        visible.forEach((p) => {
+          const params = new URLSearchParams({
+            name: p.name,
+            nights: p.nights,
+            includes: p.includes,
+            price: p.price,
+            category: p.category,
+            img: p.img,
+            from: data.depCity || "",
+            to: destName,
+            date: decodeURIComponent(data.dateSearched || ""),
+            rooms: roomsCount.toString(),
+          });
+
+          const detailsUrl = "details.html?" + params.toString();
+
+          const card = document.createElement("div");
+          card.className =
+            "bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md hover:border-blue-300 transition";
+
+          card.innerHTML = `
+            <div class="h-28 overflow-hidden">
+              <img src="${p.img}" alt="${p.name}"
+                   class="w-full h-full object-cover hover:scale-105 transition-transform duration-500">
+            </div>
+            <div class="p-4 flex flex-col gap-2">
+              <div class="flex justify-between items-start gap-2">
+                <div class="space-y-1">
+                  <span class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                    ${p.tag}
+                  </span>
+                  <h3 class="font-semibold text-[13px] leading-snug text-[#111418]">${p.name}</h3>
+                </div>
+                <span class="text-[11px] text-gray-500">${p.nights}</span>
+              </div>
+              <p class="text-[11px] text-gray-600">${p.includes}</p>
+              <div class="mt-2 flex items-center justify-between">
+                <div>
+                  <p class="text-[11px] text-gray-500">Starts from</p>
+                  <p class="text-lg font-bold text-blue-600">${p.price}</p>
+                </div>
+                <a
+                  href="${detailsUrl}"
+                  class="px-3 py-1.5 text-[11px] font-semibold rounded-full border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition">
+                  View details
+                </a>
+              </div>
+            </div>
+          `;
+          packagesEl.appendChild(card);
+        });
+      }
+
+      renderCategories();
+      renderPackages();
+    });
+  </script>
+</body>
+</html>

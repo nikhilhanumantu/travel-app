@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <title>Package Details</title>
+</head>
+<body class="bg-[#f5f7f8] font-display text-[#111418]">
+  <!-- Top bar -->
+  <header class="w-full border-b border-[#dbe0e6] bg-white">
+    <div class="mx-auto max-w-[1200px] flex items-center justify-between px-6 md:px-8 py-3">
+      <div class="flex items-center gap-2">
+        <div class="size-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+          <span class="text-xs font-bold">AI</span>
+        </div>
+        <div>
+          <p class="text-[11px] uppercase tracking-[0.18em] text-gray-400">Smart Holidays</p>
+          <h1 class="text-base md:text-lg font-semibold">Package Details</h1>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a id="back-results"
+           href="results.html"
+           class="text-xs md:text-sm px-3 py-1.5 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition">
+          ‹ Back to results
+        </a>
+        <a href="index.html"
+           class="text-xs md:text-sm px-3 py-1.5 rounded-full border border-blue-500 text-blue-600 hover:bg-blue-500 hover:text-white transition">
+          Modify Search
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-[1200px] px-6 md:px-8 py-6 md:py-8 space-y-6">
+    <!-- Main layout: left image + summary, right itinerary -->
+    <section class="grid lg:grid-cols-[1.5fr,1.3fr] gap-6">
+      <!-- Left column: hero + basic info -->
+      <div class="space-y-4">
+        <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+          <div class="h-52 md:h-64 overflow-hidden">
+            <img id="pkg-img"
+                 src=""
+                 alt="Package image"
+                 class="w-full h-full object-cover">
+          </div>
+          <div class="p-4 md:p-5 space-y-2">
+            <div class="flex items-center gap-2 mb-1">
+              <span id="pkg-category-pill"
+                    class="inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
+                Category
+              </span>
+              <span id="pkg-nights"
+                    class="text-[11px] text-gray-500"></span>
+            </div>
+            <h2 id="pkg-name" class="text-lg md:text-xl font-semibold"></h2>
+            <p id="pkg-includes" class="text-[13px] text-gray-600"></p>
+          </div>
+        </div>
+
+        <!-- Trip summary + dynamic price -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm">
+          <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-gray-500 mb-3">
+            Trip summary
+          </p>
+          <div class="space-y-2 text-sm">
+            <p><span class="text-gray-500">From</span> <span id="trip-from" class="font-semibold"></span></p>
+            <p><span class="text-gray-500">To</span> <span id="trip-to" class="font-semibold"></span></p>
+            <p><span class="text-gray-500">Travel date</span> <span id="trip-date" class="font-semibold"></span></p>
+            <p><span class="text-gray-500">Rooms</span> <span id="trip-rooms" class="font-semibold"></span></p>
+          </div>
+          <div class="mt-4 flex items-center justify-between">
+            <div>
+              <p class="text-[11px] text-gray-500">Total package price</p>
+              <p id="pkg-price" class="text-2xl font-bold text-blue-600"></p>
+              <p id="price-note" class="text-[11px] text-gray-400 mt-1"></p>
+            </div>
+          <button
+            id="continue-booking"
+            class="px-4 py-2 text-xs font-semibold rounded-full bg-blue-500 hover:bg-blue-600 text-white">
+            Continue to booking
+          </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: stay + transport + highlights -->
+      <div class="space-y-4">
+        <!-- Stay details -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm">
+          <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-gray-500 mb-3">
+            Stay details
+          </p>
+          <ul class="text-sm text-gray-700 space-y-1.5">
+            <li id="stay-hotel-line">• Hotel category: —</li>
+            <li id="stay-checkin-line">• Check‑in / check‑out: —</li>
+            <li id="stay-meals-line">• Meals: —</li>
+            <li id="stay-room-line">• Room type: —</li>
+          </ul>
+        </div>
+
+        <!-- Travel options with selection -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm">
+          <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-gray-500 mb-3">
+            Travel options
+          </p>
+
+          <!-- Choice chips -->
+          <div class="mb-4 flex flex-wrap gap-3 text-xs">
+            <label class="cursor-pointer">
+              <input type="radio" name="transport" value="flight" class="transport-radio peer hidden" checked>
+              <div class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs
+                          border-blue-500 text-blue-600 bg-blue-50 peer-checked:bg-blue-500
+                          peer-checked:text-white peer-checked:border-blue-500 transition">
+                <span class="inline-block size-1.5 rounded-full bg-blue-500 peer-checked:bg-white"></span>
+                <span>By Flight</span>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="transport" value="train" class="transport-radio peer hidden">
+              <div class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs
+                          border-gray-300 text-gray-700 bg-white hover:border-blue-500
+                          peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-blue-500 transition">
+                <span class="inline-block size-1.5 rounded-full bg-gray-300 peer-checked:bg-white"></span>
+                <span>By Train</span>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input type="radio" name="transport" value="bus" class="transport-radio peer hidden">
+              <div class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border text-xs
+                          border-gray-300 text-gray-700 bg-white hover:border-blue-500
+                          peer-checked:bg-blue-500 peer-checked:text-white peer-checked:border-blue-500 transition">
+                <span class="inline-block size-1.5 rounded-full bg-gray-300 peer-checked:bg-white"></span>
+                <span>By Bus</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="space-y-3 text-sm text-gray-700">
+            <div>
+              <p class="font-semibold text-[13px] mb-1">Selected option itinerary</p>
+              <p id="travel-main"></p>
+            </div>
+            <div>
+              <p class="font-semibold text-[13px] mb-1">Local transfers</p>
+              <p id="travel-local"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample day-wise highlights -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 md:p-5 shadow-sm">
+          <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-gray-500 mb-3">
+            Sample itinerary highlights
+          </p>
+          <ol class="text-sm text-gray-700 space-y-1.5">
+            <li><span class="font-semibold">Day 1:</span> Arrival, hotel check‑in and evening leisure / beach time.</li>
+            <li><span class="font-semibold">Day 2:</span> Local sightseeing or activities based on package theme.</li>
+            <li><span class="font-semibold">Day 3:</span> Free day, optional add‑ons like water sports or spa.</li>
+            <li><span class="font-semibold">Departure day:</span> Check‑out and transfer to airport / station.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    function getDetailsParams() {
+      const p = new URLSearchParams(window.location.search);
+      return {
+        name: p.get("name") || "",
+        nights: p.get("nights") || "",
+        includes: p.get("includes") || "",
+        price: p.get("price") || "",
+        category: p.get("category") || "",
+        img: p.get("img") || "",
+        from: p.get("from") || "",
+        to: p.get("to") || "",
+        date: p.get("date") || "",
+        rooms: p.get("rooms") || "",
+      };
+    }
+
+    function parseStartDate(d) {
+      if (!d || !d.includes("/")) return null;
+      const parts = d.split("/");
+      if (parts.length !== 3) return null;
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      if (isNaN(day) || isNaN(month) || isNaN(year)) return null;
+      return new Date(year, month, day);
+    }
+
+    function formatDate(dt) {
+      if (!dt) return "";
+      const d = dt.getDate().toString().padStart(2, "0");
+      const m = (dt.getMonth() + 1).toString().padStart(2, "0");
+      const y = dt.getFullYear();
+      return d + "/" + m + "/" + y;
+    }
+
+    function parsePrice(str) {
+      if (!str) return 0;
+      return parseInt(str.replace(/[^0-9]/g, ""), 10) || 0;
+    }
+
+    function formatINR(num) {
+      return "₹" + num.toLocaleString("en-IN");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const d = getDetailsParams();
+
+      // Top hero + basic info
+      const imgEl = document.getElementById("pkg-img");
+      const nameEl = document.getElementById("pkg-name");
+      const nightsEl = document.getElementById("pkg-nights");
+      const includesEl = document.getElementById("pkg-includes");
+      const catPill = document.getElementById("pkg-category-pill");
+
+      imgEl.src = d.img || "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=800";
+      imgEl.alt = d.name || "Package image";
+      nameEl.textContent = d.name || "Selected package";
+      nightsEl.textContent = d.nights || "";
+      includesEl.textContent = d.includes || "";
+      catPill.textContent = d.category || "Package";
+
+      // Trip summary
+      document.getElementById("trip-from").textContent = d.from || "—";
+      document.getElementById("trip-to").textContent = d.to || "—";
+      document.getElementById("trip-date").textContent = d.date || "Flexible";
+      document.getElementById("trip-rooms").textContent = d.rooms || "—";
+
+      const priceEl = document.getElementById("pkg-price");
+      const priceNoteEl = document.getElementById("price-note");
+      const basePriceStr = d.price || "";
+      const basePrice = parsePrice(basePriceStr);
+      priceEl.textContent = basePriceStr;
+      priceNoteEl.textContent = "Showing price with flights included. Change travel mode to see updated amount.";
+
+      // Back to results
+      const backLink = document.getElementById("back-results");
+      if (document.referrer && document.referrer.includes("results.html")) {
+        backLink.href = document.referrer;
+      }
+
+      // Stay details
+      const stayHotel = document.getElementById("stay-hotel-line");
+      const stayCheckin = document.getElementById("stay-checkin-line");
+      const stayMeals = document.getElementById("stay-meals-line");
+      const stayRoom = document.getElementById("stay-room-line");
+
+      const category = (d.category || "").toLowerCase();
+
+      if (category === "honeymoon" || category === "luxury") {
+        stayHotel.textContent = "• Hotel category: 5* or premium 4* resort with romantic add‑ons.";
+        stayMeals.textContent = "• Meals: Daily breakfast + 1 candlelight dinner + honeymoon surprises.";
+        stayRoom.textContent = "• Room type: Deluxe room / suite based on availability.";
+      } else if (category === "family") {
+        stayHotel.textContent = "• Hotel category: Comfortable 4* family‑friendly hotel.";
+        stayMeals.textContent = "• Meals: Daily breakfast + 1 major meal (lunch/dinner) on selected days.";
+        stayRoom.textContent = "• Room type: Family room or interconnected rooms where available.";
+      } else if (category === "budget" || category === "weekend") {
+        stayHotel.textContent = "• Hotel category: Clean 3* hotel in central location.";
+        stayMeals.textContent = "• Meals: Daily breakfast included.";
+        stayRoom.textContent = "• Room type: Standard room (double / twin).";
+      } else if (category === "workation") {
+        stayHotel.textContent = "• Hotel category: 3* / 4* property with reliable Wi‑Fi and workspace.";
+        stayMeals.textContent = "• Meals: Breakfast included; long‑stay meal plans on request.";
+        stayRoom.textContent = "• Room type: Workation‑friendly room with desk/chair.";
+      } else {
+        stayHotel.textContent = "• Hotel category: 3* / 4* hotel depending on final quote.";
+        stayMeals.textContent = "• Meals: Daily breakfast as standard.";
+        stayRoom.textContent = "• Room type: Standard room suitable for selected occupancy.";
+      }
+      stayCheckin.textContent = "• Check‑in / check‑out: Standard check‑in 2:00 PM, check‑out 11:00 AM.";
+
+      // --- Travel option logic ---
+      const travelMainP = document.getElementById("travel-main");
+      const localP = document.getElementById("travel-local");
+
+      const startDate = parseStartDate(d.date);
+      let returnDate = null;
+      if (startDate && d.nights && d.nights.includes("N")) {
+        const nightsNum = parseInt(d.nights.split("N")[0], 10);
+        if (!isNaN(nightsNum)) {
+          returnDate = new Date(startDate);
+          returnDate.setDate(startDate.getDate() + nightsNum);
+        }
+      }
+      const departDateStr = startDate ? formatDate(startDate) : (d.date || "As per selection");
+      const returnDateStr = returnDate ? formatDate(returnDate) : "Last day of stay";
+
+      const fromCity = d.from || "Your City";
+      const toCity = d.to || "Destination";
+
+      // Days left until trip start (for 10-day rule)
+      let daysLeft = null;
+      if (startDate) {
+        const today = new Date();
+        const diffMs = startDate.setHours(0,0,0,0) - today.setHours(0,0,0,0);
+        daysLeft = Math.round(diffMs / (1000 * 60 * 60 * 24)); // [web:154]
+      }
+
+      function updateTransport(option) {
+        let desc = "";
+        let price = basePrice;
+        let note = "";
+
+        const within10Days = daysLeft !== null && daysLeft <= 10;
+
+        if (option === "flight") {
+          price = basePrice;
+          note = "Price includes return economy flights plus hotel & inclusions.";
+          desc =
+            "Outbound: IndiGo 6E‑302, " + fromCity + " → " + toCity +
+            " on " + departDateStr + ", dep 07:25, arr 09:15. " +
+            "Return: IndiGo 6E‑305, " + toCity + " → " + fromCity +
+            " on " + returnDateStr + ", dep 18:40, arr 20:30. (Sample flight numbers and timings.)";
+        } else if (option === "train") {
+          if (within10Days) {
+            price = Math.max(0, Math.round(basePrice * 0.7));
+            note = "Train quota not available within 10 days of travel. You can continue with bus or flight option.";
+            desc =
+              "Trains are not available for this route within 10 days of your selected date. " +
+              "You can proceed with flight or bus option. If your dates are flexible, train availability will be checked on the payment page.";
+          } else {
+            price = Math.max(0, Math.round(basePrice * 0.8));
+            note = "Approx. 20% lower than flight package (train instead of flights).";
+            desc =
+              "Train (3A/2A): " + fromCity + " → " + toCity +
+              " on " + departDateStr +
+              ", dep 21:00, arr next day 07:30. Return on " + returnDateStr +
+              " at similar overnight timing. Exact train name/number will be confirmed during booking.";
+          }
+        } else if (option === "bus") {
+          price = Math.max(0, Math.round(basePrice * 0.7));
+          if (within10Days) {
+            note = "Approx. 30% lower than flight package. Final bus operator & timings will be shown on the payment page.";
+            desc =
+              "AC Sleeper Bus will be arranged from " + fromCity + " → " + toCity +
+              " around your selected date. Exact bus operator, boarding point, departure time and seat type " +
+              "will be displayed to you on the payment page before you pay.";
+          } else {
+            note = "Approx. 30% lower than flight package (AC sleeper bus instead of flights).";
+            desc =
+              "AC Sleeper Bus: " + fromCity + " → " + toCity +
+              " on " + departDateStr +
+              ", dep 22:00, arr next day 06:00. Return on " + returnDateStr +
+              " (dep 22:30, arr next day 06:30). Operator details will be shared after confirmation.";
+          }
+        }
+
+        priceEl.textContent = price ? formatINR(price) : basePriceStr;
+        priceNoteEl.textContent = note;
+        localP.textContent =
+          "Private / shared cab between " + (toCity || "destination") +
+          " airport / station and hotel, plus local sightseeing transfers as per itinerary.";
+        travelMainP.textContent = desc;
+      }
+
+      // Initialize with flight selected
+      updateTransport("flight");
+
+            // Continue to booking → payment page
+      const continueBtn = document.getElementById("continue-booking");
+      if (continueBtn) {
+        continueBtn.addEventListener("click", () => {
+          // simple redirect; you can also pass query params if needed
+          window.location.href = "payment.html";
+        });
+      }
+
+      // Wire radio buttons
+      document.querySelectorAll(".transport-radio").forEach(radio => {
+        radio.addEventListener("change", () => {
+          if (radio.checked) {
+            updateTransport(radio.value);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

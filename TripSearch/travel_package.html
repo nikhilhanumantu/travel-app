@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#258df4",
+            "background-light": "#f5f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <title>TravelAI Search</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111418] dark:text-white transition-colors">
+  <!-- Top Navigation -->
+  <header class="sticky top-0 z-50 w-full border-b border-solid border-[#dbe0e6] bg-white dark:bg-background-dark dark:border-gray-800">
+    <div class="mx-auto flex max-w-[1440px] items-center justify-between px-10 py-3">
+      <div class="flex items-center gap-4">
+        <div class="size-8 text-primary">
+          <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+          </svg>
+        </div>
+        <h2 class="text-xl font-bold leading-tight">TravelAI</h2>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Search Area -->
+  <div class="bg-white dark:bg-background-dark border-b border-[#dbe0e6] dark:border-gray-800">
+    <div class="mx-auto max-w-[1440px] px-10 py-6">
+      <div class="flex flex-wrap items-end gap-3 bg-white dark:bg-gray-900 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-800">
+
+        <!-- From -->
+        <label class="flex flex-col min-w-[200px] flex-1">
+          <p class="text-xs font-semibold text-gray-500 uppercase pb-1 pl-1">From</p>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">location_on</span>
+            <input id="from-input"
+              class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:ring-primary focus:border-primary"
+              placeholder="Enter source" type="text" autocomplete="off" />
+            <ul id="from-suggestions"
+              class="absolute z-40 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow hidden"></ul>
+          </div>
+          <p id="from-error" class="mt-1 text-[11px] text-red-500 hidden">Please enter a departure city.</p>
+        </label>
+
+        <!-- To -->
+        <label class="flex flex-col min-w-[200px] flex-1">
+          <p class="text-xs font-semibold text-gray-500 uppercase pb-1 pl-1">To</p>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">flight_takeoff</span>
+            <input id="to-input"
+              class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:ring-primary focus:border-primary"
+              placeholder="Enter destination" type="text" autocomplete="off" />
+            <ul id="to-suggestions"
+              class="absolute z-40 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow hidden"></ul>
+          </div>
+          <p id="to-error" class="mt-1 text-[11px] text-red-500 hidden">Please enter a destination.</p>
+        </label>
+
+        <!-- Date -->
+        <label class="flex flex-col min-w-[180px] flex-1">
+          <p class="text-xs font-semibold text-gray-500 uppercase pb-1 pl-1">Departure Date</p>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">calendar_month</span>
+            <input id="date-input" class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:ring-primary focus:border-primary" type="date" />
+          </div>
+          <p id="date-error" class="mt-1 text-[11px] text-red-500 hidden">Please select a departure date.</p>
+        </label>
+
+        <!-- Rooms/Guests -->
+        <label class="flex flex-col min-w-[150px] flex-1">
+          <p class="text-xs font-semibold text-gray-500 uppercase pb-1 pl-1">Rooms/Guests</p>
+          <div class="relative">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">group</span>
+            <button id="rooms-trigger" type="button"
+              class="w-full text-left pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+              1 Room, 2 Guests
+            </button>
+
+            <div id="rooms-popup"
+              class="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg p-4 hidden z-50">
+              <p class="text-xs text-amber-600 font-semibold mb-3">
+                Total 4 guests (Max. 3 adults) allowed in a room
+              </p>
+
+              <div id="rooms-container"></div>
+
+              <div class="flex justify-between items-center border-t pt-3 mt-2">
+                <button id="add-room" type="button"
+                  class="text-xs font-semibold text-primary">+ Add another room</button>
+                <button id="rooms-apply" type="button"
+                  class="px-4 py-1.5 bg-primary text-white rounded-lg text-xs font-bold">
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+        </label>
+
+        <button id="search-btn"
+          class="h-11 px-8 bg-primary text-white rounded-lg font-bold text-sm tracking-wider uppercase hover:bg-blue-600 transition-all flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">search</span>
+          SEARCH
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multi-room guests + redirect script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const trigger = document.getElementById("rooms-trigger");
+      const popup = document.getElementById("rooms-popup");
+      const applyBtn = document.getElementById("rooms-apply");
+      const addRoomBtn = document.getElementById("add-room");
+      const roomsContainer = document.getElementById("rooms-container");
+
+      const maxGuestsPerRoom = 4;
+      const maxAdultsPerRoom = 3;
+      const rooms = [];
+
+      function updateTriggerText() {
+        let totalGuests = 0;
+        rooms.forEach(r => totalGuests += r.adults + r.children);
+        const roomsCount = rooms.length;
+        trigger.textContent =
+          `${roomsCount} Room${roomsCount > 1 ? "s" : ""}, ` +
+          `${totalGuests} Guest${totalGuests > 1 ? "s" : ""}`;
+      }
+
+      function relabelRooms() {
+        Array.from(roomsContainer.children).forEach((el, i) => {
+          const label = el.querySelector(".room-label");
+          if (label) label.textContent = `Room ${i + 1}`;
+        });
+      }
+
+      function createRoom(initialAdults = 2, initialChildren = 0) {
+        const room = { adults: initialAdults, children: initialChildren };
+
+        const index = rooms.length;
+        const wrapper = document.createElement("div");
+        wrapper.className = "mb-4 border-b border-gray-100 dark:border-gray-800 pb-3 last:border-b-0";
+
+        wrapper.innerHTML = `
+          <div class="flex items-center justify-between mb-3">
+            <p class="room-label text-xs font-semibold text-gray-500 uppercase">Room ${index + 1}</p>
+            ${index > 0 ? '<button type="button" class="text-[11px] text-red-500 remove-room">Remove</button>' : ""}
+          </div>
+
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <p class="text-sm font-medium">Adults</p>
+              <p class="text-[11px] text-gray-500">Above 12 years</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" data-type="adult" data-action="dec"
+                class="rooms-btn size-7 flex items-center justify-center border rounded">−</button>
+              <span class="adult-count w-6 text-center text-sm">${initialAdults}</span>
+              <button type="button" data-type="adult" data-action="inc"
+                class="rooms-btn size-7 flex items-center justify-center border rounded">+</button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium">Children</p>
+              <p class="text-[11px] text-gray-500">Below 12 years</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" data-type="child" data-action="dec"
+                class="rooms-btn size-7 flex items-center justify-center border rounded">−</button>
+              <span class="child-count w-6 text-center text-sm">${initialChildren}</span>
+              <button type="button" data-type="child" data-action="inc"
+                class="rooms-btn size-7 flex items-center justify-center border rounded">+</button>
+            </div>
+          </div>
+        `;
+
+        roomsContainer.appendChild(wrapper);
+
+        const adultSpan = wrapper.querySelector(".adult-count");
+        const childSpan = wrapper.querySelector(".child-count");
+
+        wrapper.querySelectorAll(".rooms-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const type = btn.dataset.type;
+            const action = btn.dataset.action;
+            const totalGuests = room.adults + room.children;
+
+            if (type === "adult") {
+              if (action === "inc" && room.adults < maxAdultsPerRoom && totalGuests < maxGuestsPerRoom) {
+                room.adults++;
+              }
+              if (action === "dec" && room.adults > 1) {
+                room.adults--;
+              }
+            } else {
+              if (action === "inc" && totalGuests < maxGuestsPerRoom) {
+                room.children++;
+              }
+              if (action === "dec" && room.children > 0) {
+                room.children--;
+              }
+            }
+            adultSpan.textContent = room.adults;
+            childSpan.textContent = room.children;
+            updateTriggerText();
+          });
+        });
+
+        const removeBtn = wrapper.querySelector(".remove-room");
+        if (removeBtn) {
+          removeBtn.addEventListener("click", () => {
+            const idx = rooms.indexOf(room);
+            if (idx > -1) rooms.splice(idx, 1);
+            wrapper.remove();
+            relabelRooms();
+            updateTriggerText();
+          });
+        }
+
+        rooms.push(room);
+        updateTriggerText();
+      }
+
+      // initial room
+      createRoom(2, 0);
+
+      if (trigger && popup) {
+        trigger.addEventListener("click", () => {
+          popup.classList.toggle("hidden");
+        });
+
+        document.addEventListener("click", (e) => {
+          if (!popup.contains(e.target) && e.target !== trigger) {
+            popup.classList.add("hidden");
+          }
+        });
+      }
+
+      if (addRoomBtn) {
+        addRoomBtn.addEventListener("click", () => {
+          createRoom(2, 0);
+          relabelRooms();
+        });
+      }
+
+      if (applyBtn) {
+        applyBtn.addEventListener("click", () => {
+          popup.classList.add("hidden");
+        });
+      }
+
+      // SEARCH button with validation
+      const searchBtn = document.getElementById("search-btn");
+      const fromInput = document.getElementById("from-input");
+      const toInput = document.getElementById("to-input");
+      const dateInput = document.getElementById("date-input");
+
+      const fromError = document.getElementById("from-error");
+      const toError = document.getElementById("to-error");
+      const dateError = document.getElementById("date-error");
+
+      function setError(inputEl, errorEl, hasError) {
+        if (hasError) {
+          inputEl.classList.remove("border-gray-200", "dark:border-gray-700");
+          inputEl.classList.add("border-red-500");
+          errorEl.classList.remove("hidden");
+        } else {
+          inputEl.classList.remove("border-red-500");
+          inputEl.classList.add("border-gray-200", "dark:border-gray-700");
+          errorEl.classList.add("hidden");
+        }
+      }
+
+      searchBtn.addEventListener("click", () => {
+        const from = fromInput.value.trim();
+        const to = toInput.value.trim();
+        const date = dateInput.value;
+
+        let hasError = false;
+
+        if (!from) {
+          setError(fromInput, fromError, true);
+          hasError = true;
+        } else {
+          setError(fromInput, fromError, false);
+        }
+
+        if (!to) {
+          setError(toInput, toError, true);
+          hasError = true;
+        } else {
+          setError(toInput, toError, false);
+        }
+
+        if (!date) {
+          setError(dateInput, dateError, true);
+          hasError = true;
+        } else {
+          setError(dateInput, dateError, false);
+        }
+
+        if (hasError) return; // stop here, do not go to results.html
+
+        // all good → build URL and go to results.html
+        let dateSearched = "";
+        if (date) {
+          const [y, m, d] = date.split("-");
+          dateSearched = `${d}/${m}/${y}`;
+        }
+
+        const totalRooms = rooms.length || 1;
+        const roomsParam = `${totalRooms},0,0,0,,,`;
+
+        const params = new URLSearchParams();
+        params.set("fromSearchWidget", "true");
+        params.set("searchDep", to || "");
+        params.set("dest", to || "");
+        params.set("destValue", to || "");
+        params.set("depCity", from || "");
+        params.set("initd", "searchwidget_landing_custom_notheme");
+        params.set("dateSearched", encodeURIComponent(dateSearched));
+        params.set("glp", "true");
+        params.set("pdo", "true");
+        params.set("rooms", roomsParam);
+        params.set("affiliate", "MMT");
+
+        const url = "results.html?" + params.toString();
+        window.location.href = url;
+      });
+    });
+  </script>
+
+  <!-- Aviasales autocomplete (free, no key) -->
+  <script>
+    const AUTOCOMPLETE_URL =
+      "https://autocomplete.travelpayouts.com/places2?locale=en&types[]=airport&types[]=city&term=";
+
+    async function fetchPlaces(term) {
+      if (!term || term.length < 2) return [];
+      try {
+        const res = await fetch(AUTOCOMPLETE_URL + encodeURIComponent(term));
+        if (!res.ok) return [];
+        return await res.json();
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function renderSuggestions(listEl, inputEl, places) {
+      listEl.innerHTML = "";
+      if (!places.length) {
+        listEl.classList.add("hidden");
+        return;
+      }
+      places.slice(0, 10).forEach(place => {
+        const li = document.createElement("li");
+        li.className =
+          "px-3 py-2 text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 flex justify-between";
+        const code = place.city_code || place.code || "";
+        const label = code ? `${place.name} (${code})` : place.name;
+        li.textContent = label;
+        li.onclick = () => {
+          inputEl.value = place.name;
+          listEl.classList.add("hidden");
+        };
+        listEl.appendChild(li);
+      });
+      listEl.classList.remove("hidden");
+    }
+
+    function setupAutocomplete(inputId, listId) {
+      const inputEl = document.getElementById(inputId);
+      const listEl = document.getElementById(listId);
+      if (!inputEl || !listEl) return;
+
+      let timeoutId;
+
+      inputEl.addEventListener("input", () => {
+        clearTimeout(timeoutId);
+        const term = inputEl.value.trim();
+        timeoutId = setTimeout(async () => {
+          const places = await fetchPlaces(term);
+          renderSuggestions(listEl, inputEl, places);
+        }, 250);
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!listEl.contains(e.target) && e.target !== inputEl) {
+          listEl.classList.add("hidden");
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setupAutocomplete("from-input", "from-suggestions");
+      setupAutocomplete("to-input", "to-suggestions");
+    });
+  </script>
+</body>
+</html>
