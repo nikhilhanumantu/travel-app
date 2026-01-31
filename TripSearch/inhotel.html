@@ -4,19 +4,16 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Hostel Details</title>
-
 <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-
 <script>
 tailwind.config = {
   darkMode: "class",
   theme: {
     extend: {
       colors: {
-        primary: "#47b4eb",
+        primary: "#067ff9",
         "background-light": "#f6f7f8",
       },
       fontFamily: {
@@ -26,124 +23,172 @@ tailwind.config = {
   },
 };
 </script>
-
 <style>
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { scrollbar-width: none; }
+.room-card.selected { border-color: #067ff9; background-color: #eff6ff; }
+.room-card.selected .check-icon { display: block; }
 </style>
-
 </head>
 
 <body class="bg-background-light font-display min-h-screen">
-<div class="max-w-[480px] mx-auto bg-white min-h-screen pb-28">
+<div class="max-w-[500px] mx-auto bg-white min-h-screen pb-32 shadow-xl">
 
-<!-- HEADER -->
-<header class="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
-  <button class="p-2 rounded-full bg-gray-100">
+<header class="flex justify-between items-center p-4 border-b sticky top-0 bg-white/95 backdrop-blur z-20">
+  <button onclick="history.back()" class="p-2 rounded-full hover:bg-gray-100">
     <span class="material-symbols-outlined">arrow_back</span>
   </button>
   <div class="flex gap-2">
-    <button class="p-2 rounded-full bg-gray-100">
+    <button class="p-2 rounded-full hover:bg-gray-100">
       <span class="material-symbols-outlined">share</span>
     </button>
-    <button class="p-2 rounded-full bg-gray-100">
+    <button class="p-2 rounded-full hover:bg-gray-100">
       <span class="material-symbols-outlined">favorite</span>
     </button>
   </div>
 </header>
 
-<!-- IMAGE SCROLL -->
 <div class="flex overflow-x-auto gap-3 p-4 hide-scrollbar">
-  <div class="w-[85%] aspect-[4/3] bg-gray-300 rounded-xl"></div>
-  <div class="w-[85%] aspect-[4/3] bg-gray-300 rounded-xl"></div>
-  <div class="w-[85%] aspect-[4/3] bg-gray-300 rounded-xl"></div>
+  <img id="mainImage" class="w-[90%] aspect-[4/3] object-cover rounded-2xl shadow-sm" src="" alt="Hostel Main">
+  <div class="w-[90%] aspect-[4/3] bg-gray-100 rounded-2xl flex items-center justify-center shrink-0">
+     <span class="text-gray-400 font-bold">More Photos +</span>
+  </div>
 </div>
 
-<!-- TITLE -->
-<div class="px-4">
-  <h1 class="text-2xl font-extrabold">The Urban Oasis Hostel</h1>
-  <p class="text-gray-500 text-sm flex items-center gap-1">
-    <span class="material-symbols-outlined text-sm">location_on</span>
-    123 Downtown Street, Berlin, Germany
+<div class="px-5">
+  <div class="flex justify-between items-start">
+      <h1 id="hotelName" class="text-2xl font-extrabold text-gray-900 leading-tight">Hotel Name</h1>
+      <div class="flex items-center gap-1 bg-yellow-50 px-2 py-1 rounded-lg">
+          <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+          <span id="hotelRate" class="font-bold text-sm">4.5</span>
+      </div>
+  </div>
+  <p class="text-gray-500 text-sm flex items-center gap-1 mt-2">
+    <span class="material-symbols-outlined text-sm text-primary">location_on</span>
+    <span id="hotelLoc">Location</span>
   </p>
 </div>
 
-<!-- DATE & GUEST -->
-<div class="px-4 mt-6">
-  <div class="bg-gray-50 rounded-xl p-3 flex justify-between items-center">
+<div class="px-5 mt-6">
+    <h3 class="font-bold text-gray-900 mb-3">Amenities</h3>
+    <div id="amenitiesGrid" class="grid grid-cols-4 gap-4 text-center">
+        </div>
+</div>
 
+<div class="px-5 mt-6">
+  <h3 class="font-bold text-gray-900 mb-3">Trip Details</h3>
+  <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex justify-between items-center">
     <div class="flex items-center gap-3">
-      <span class="material-symbols-outlined text-gray-400">calendar_month</span>
+      <div class="bg-white p-2 rounded-full shadow-sm">
+          <span class="material-symbols-outlined text-gray-600 text-sm">calendar_month</span>
+      </div>
       <div>
-        <p class="text-[10px] font-bold text-gray-500">DATES</p>
-        <p id="dateText" class="font-semibold">Oct 12 - Oct 15</p>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider">DATES</p>
+        <p id="dateText" class="font-bold text-sm">Select Date</p>
       </div>
     </div>
-
-    <div class="w-px h-8 bg-gray-300"></div>
-
+    <div class="w-px h-8 bg-gray-200"></div>
     <div class="flex items-center gap-3">
-      <span class="material-symbols-outlined text-gray-400">group</span>
+       <div class="bg-white p-2 rounded-full shadow-sm">
+          <span class="material-symbols-outlined text-gray-600 text-sm">group</span>
+      </div>
       <div>
-        <p class="text-[10px] font-bold text-gray-500">GUESTS</p>
-        <p id="guestText" class="font-semibold">1 Guest</p>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider">GUESTS</p>
+        <p id="guestText" class="font-bold text-sm">1 Guest</p>
       </div>
     </div>
-
-    <button id="editBtn" class="text-primary font-bold">Edit</button>
+    <button id="editBtn" class="text-primary font-bold text-sm px-3 py-1 bg-blue-50 rounded-lg">Edit</button>
   </div>
 
-  <!-- EDIT PANEL -->
-  <div id="editPanel" class="hidden mt-4 bg-white p-4 rounded-xl shadow">
+  <div id="editPanel" class="hidden mt-3 bg-white border border-gray-100 p-4 rounded-2xl shadow-lg transition-all">
     <div class="flex flex-col gap-3">
-      <label class="text-sm font-semibold">Check-in</label>
-      <input id="checkIn" type="date" class="border rounded-lg p-2">
-
-      <label class="text-sm font-semibold">Check-out</label>
-      <input id="checkOut" type="date" class="border rounded-lg p-2">
-
-      <label class="text-sm font-semibold">Guests</label>
-      <input id="guests" type="number" min="1" value="1" class="border rounded-lg p-2">
-
-      <button id="saveBtn" class="bg-primary text-white py-2 rounded-lg font-bold">
-        Save
-      </button>
+      <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold text-gray-500">Check-in</label>
+            <input id="checkIn" type="date" class="w-full border-gray-200 rounded-lg text-sm font-bold mt-1 focus:ring-primary focus:border-primary">
+          </div>
+          <div>
+            <label class="text-xs font-bold text-gray-500">Check-out</label>
+            <input id="checkOut" type="date" class="w-full border-gray-200 rounded-lg text-sm font-bold mt-1 focus:ring-primary focus:border-primary">
+          </div>
+      </div>
+      <div>
+        <label class="text-xs font-bold text-gray-500">Guests</label>
+        <input id="guests" type="number" min="1" value="1" class="w-full border-gray-200 rounded-lg text-sm font-bold mt-1 focus:ring-primary focus:border-primary">
+      </div>
+      <button id="saveBtn" class="bg-gray-900 text-white py-3 rounded-xl font-bold mt-2 hover:bg-black">Update Price</button>
     </div>
   </div>
 </div>
 
-<!-- MAP SECTION -->
-<div class="px-4 mt-8">
-  <h3 class="text-base font-bold mb-3">Location</h3>
+<div class="px-5 mt-8">
+    <h3 class="font-bold text-gray-900 mb-3">Select Room</h3>
+    <div class="space-y-3">
+        <div onclick="selectRoom('dorm')" id="room-dorm" class="room-card selected border-2 border-gray-200 rounded-xl p-4 cursor-pointer relative transition-all">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h4 class="font-bold">Bunk Bed in Mixed Dorm</h4>
+                    <p class="text-xs text-gray-500 mt-1">1 Bunk Bed • Shared Bathroom</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-primary text-lg">₹<span id="priceDorm">0</span></p>
+                    <p class="text-[10px] text-gray-400">/night</p>
+                </div>
+            </div>
+            <span class="check-icon material-symbols-outlined absolute top-[-10px] right-[-10px] bg-primary text-white rounded-full p-1 text-sm shadow-md" style="display: block;">check</span>
+        </div>
 
-  <a
-    href="https://www.google.com/maps/search/?api=1&query=The+Urban+Oasis+Hostel,+123+Downtown+Street,+Berlin,+Germany"
-    target="_blank"
-    class="relative block w-full h-40 rounded-xl overflow-hidden shadow"
-  >
-    <iframe
-      class="w-full h-full pointer-events-none"
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      src="https://www.google.com/maps?q=The+Urban+Oasis+Hostel,+123+Downtown+Street,+Berlin,+Germany&z=16&output=embed">
-    </iframe>
-
-    <div class="absolute inset-0 flex items-center justify-center">
-      <div class="bg-primary text-white p-2 rounded-full shadow-lg animate-bounce">
-        <span class="material-symbols-outlined text-lg">location_on</span>
-      </div>
+        <div onclick="selectRoom('private')" id="room-private" class="room-card border-2 border-gray-200 rounded-xl p-4 cursor-pointer relative transition-all">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h4 class="font-bold">Private Double Room</h4>
+                    <p class="text-xs text-gray-500 mt-1">1 Queen Bed • Attached Bathroom</p>
+                </div>
+                <div class="text-right">
+                    <p class="font-bold text-gray-900 text-lg">₹<span id="pricePrivate">0</span></p>
+                    <p class="text-[10px] text-gray-400">/night</p>
+                </div>
+            </div>
+            <span class="check-icon material-symbols-outlined absolute top-[-10px] right-[-10px] bg-primary text-white rounded-full p-1 text-sm shadow-md" style="display: none;">check</span>
+        </div>
     </div>
-  </a>
 </div>
 
-<!-- BOTTOM CTA -->
-<div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
-  <div class="max-w-[480px] mx-auto flex justify-between items-center">
-    <div>
-      <p class="text-sm text-gray-500">Starting from</p>
-      <p class="text-xl font-extrabold">2400.00 / night</p>
+<div class="px-5 mt-8 mb-4">
+  <div class="flex items-center justify-between mb-3">
+      <h3 class="font-bold text-gray-900">Location</h3>
+      <button class="text-xs text-primary font-bold">View on Map</button>
+  </div>
+  
+  <div class="relative w-full h-48 rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-gray-100">
+    <iframe
+      id="mapFrame"
+      class="w-full h-full border-0"
+      loading="lazy"
+      allowfullscreen
+      referrerpolicy="no-referrer-when-downgrade"
+      src="">
+    </iframe>
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+       <div class="relative">
+           <span class="material-symbols-outlined text-4xl text-primary drop-shadow-xl animate-bounce">location_on</span>
+           <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-1 bg-black/20 rounded-full blur-[2px]"></div>
+       </div>
     </div>
-    <button class="bg-primary text-white px-6 py-3 rounded-xl font-bold">
+  </div>
+  <p class="text-xs text-gray-500 mt-2 text-center">Location is approximate for security reasons.</p>
+</div>
+
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 pb-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] z-30">
+  <div class="max-w-[500px] mx-auto flex justify-between items-center">
+    <div>
+      <p class="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Total Price</p>
+      <div class="flex items-baseline gap-1">
+          <p class="text-2xl font-black text-gray-900">₹<span id="totalPrice">0</span></p>
+          <span class="text-xs text-gray-400 font-medium">+ taxes</span>
+      </div>
+    </div>
+    <button onclick="bookNow()" class="bg-primary hover:bg-blue-600 text-white px-8 py-3 rounded-xl font-bold text-lg shadow-lg shadow-blue-500/30 transition-all active:scale-95">
       Book Now
     </button>
   </div>
@@ -151,38 +196,163 @@ tailwind.config = {
 
 </div>
 
-<!-- SCRIPT -->
 <script>
-const editBtn = document.getElementById("editBtn");
-const editPanel = document.getElementById("editPanel");
-const saveBtn = document.getElementById("saveBtn");
-
-const dateText = document.getElementById("dateText");
-const guestText = document.getElementById("guestText");
-
-editBtn.onclick = () => {
-  editPanel.classList.toggle("hidden");
+// --- State ---
+const params = new URLSearchParams(window.location.search);
+const hotelData = {
+    name: params.get('name') || 'Hotel Name',
+    loc: params.get('location') || 'Location',
+    price: parseInt(params.get('price')) || 1000,
+    img: params.get('img') || '',
+    rate: params.get('rate') || '4.5',
+    wifi: params.get('wifi') === 'true',
+    pool: params.get('pool') === 'true'
 };
 
-// Function to format date as "Jan 31"
-function formatDate(dateStr) {
-  if (!dateStr) return "";
-  const options = { month: "short", day: "numeric" };
-  return new Date(dateStr).toLocaleDateString("en-US", options);
+let currentState = {
+    checkIn: '',
+    checkOut: '',
+    nights: 1,
+    guests: 1,
+    roomType: 'dorm', // or 'private'
+    basePrice: hotelData.price
+};
+
+// --- Init UI ---
+function init() {
+    // Populate Static Info
+    document.getElementById('hotelName').innerText = hotelData.name;
+    document.getElementById('hotelLoc').innerText = `${hotelData.loc}, India`;
+    document.getElementById('hotelRate').innerText = hotelData.rate;
+    document.getElementById('mainImage').src = hotelData.img;
+
+    // Populate Amenities
+    const amenities = [
+        { name: 'Wifi', icon: 'wifi', active: hotelData.wifi },
+        { name: 'Pool', icon: 'pool', active: hotelData.pool },
+        { name: 'AC', icon: 'ac_unit', active: true },
+        { name: 'Locker', icon: 'lock', active: true }
+    ];
+    
+    const amGrid = document.getElementById('amenitiesGrid');
+    amenities.forEach(am => {
+        if(am.active) {
+            amGrid.innerHTML += `
+                <div class="flex flex-col items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                    <span class="material-symbols-outlined text-gray-600">${am.icon}</span>
+                    <span class="text-xs font-bold text-gray-600">${am.name}</span>
+                </div>
+            `;
+        }
+    });
+
+    // Populate Map
+    const mapUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3506.14!2d77.2!3d28.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z${encodeURIComponent(hotelData.loc + ' India')}!5e0!3m2!1sen!2sin!4v1600000000000!5m2!1sen!2sin`;
+    document.getElementById('mapFrame').src = mapUrl;
+
+    // Set Room Prices
+    document.getElementById('priceDorm').innerText = hotelData.price;
+    document.getElementById('pricePrivate').innerText = hotelData.price * 2.5;
+
+    // Set Default Dates (Tomorrow)
+    const today = new Date();
+    const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+    const dayAfter = new Date(tomorrow); dayAfter.setDate(tomorrow.getDate() + 1);
+    
+    document.getElementById('checkIn').valueAsDate = tomorrow;
+    document.getElementById('checkOut').valueAsDate = dayAfter;
+    
+    updateStateFromInputs();
 }
 
-saveBtn.onclick = () => {
-  const checkIn = document.getElementById("checkIn").value;
-  const checkOut = document.getElementById("checkOut").value;
-  const guests = document.getElementById("guests").value;
+// --- Logic ---
 
-  if (checkIn && checkOut) {
-    dateText.textContent = `${formatDate(checkIn)} – ${formatDate(checkOut)}`;
-  }
+function formatDate(dateStr) {
+  if (!dateStr) return "Select Date";
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
 
-  guestText.textContent = `${guests} Guest${guests > 1 ? "s" : ""}`;
-  editPanel.classList.add("hidden");
+function updateStateFromInputs() {
+    const cin = document.getElementById('checkIn').value;
+    const cout = document.getElementById('checkOut').value;
+    const g = parseInt(document.getElementById('guests').value);
+
+    currentState.guests = g || 1;
+    document.getElementById('guestText').innerText = `${currentState.guests} Guest${currentState.guests > 1 ? 's' : ''}`;
+
+    if (cin && cout) {
+        currentState.checkIn = cin;
+        currentState.checkOut = cout;
+        
+        const d1 = new Date(cin);
+        const d2 = new Date(cout);
+        const diff = d2 - d1;
+        const nights = Math.ceil(diff / (1000 * 60 * 60 * 24));
+        
+        currentState.nights = nights > 0 ? nights : 1;
+        document.getElementById('dateText').innerText = `${formatDate(cin)} - ${formatDate(cout)}`;
+    }
+    
+    calculateTotal();
+}
+
+function selectRoom(type) {
+    currentState.roomType = type;
+    
+    // UI Updates
+    document.querySelectorAll('.room-card').forEach(c => {
+        c.classList.remove('selected');
+        c.querySelector('.check-icon').style.display = 'none';
+    });
+    
+    const selected = document.getElementById(`room-${type}`);
+    selected.classList.add('selected');
+    selected.querySelector('.check-icon').style.display = 'block';
+    
+    calculateTotal();
+}
+
+function calculateTotal() {
+    // Pricing Logic
+    // Dorm = Base Price * Guests * Nights
+    // Private = (Base Price * 2.5) * Nights (Assuming room fits 2, usually price per room)
+    
+    let nightPrice = 0;
+    
+    if (currentState.roomType === 'dorm') {
+        nightPrice = currentState.basePrice * currentState.guests;
+    } else {
+        // Private room logic: Base price is per room, roughly assuming 1 room needed for every 2 people
+        const roomsNeeded = Math.ceil(currentState.guests / 2);
+        nightPrice = (currentState.basePrice * 2.5) * roomsNeeded; 
+    }
+    
+    const total = nightPrice * currentState.nights;
+    
+    // Add tax (12%)
+    const finalTotal = Math.round(total * 1.12);
+    
+    document.getElementById('totalPrice').innerText = finalTotal;
+    return finalTotal;
+}
+
+function bookNow() {
+    const amount = calculateTotal();
+    // Redirect to payment
+    window.location.href = `payment.html?amount=${amount}`;
+}
+
+// --- Event Listeners ---
+document.getElementById('editBtn').onclick = () => document.getElementById('editPanel').classList.toggle('hidden');
+document.getElementById('saveBtn').onclick = () => {
+    updateStateFromInputs();
+    document.getElementById('editPanel').classList.add('hidden');
 };
+
+// Initialize
+init();
+
 </script>
 
 </body>
