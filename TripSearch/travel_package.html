@@ -313,11 +313,22 @@
         }
 
         if (!date) {
-          setError(dateInput, dateError, true);
+        setError(dateInput, dateError, true);
+        hasError = true;
+}       else {
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const selectedDate = new Date(date);
+                if (selectedDate < today) {
+          dateError.textContent = "Date cannot be in the past.";
+          dateError.classList.remove("hidden");
+          dateInput.classList.add("border-red-500");
           hasError = true;
         } else {
           setError(dateInput, dateError, false);
         }
+      }
+
 
         if (hasError) return; // stop here, do not go to results.html
 
@@ -331,14 +342,16 @@
         const totalRooms = rooms.length || 1;
         const roomsParam = `${totalRooms},0,0,0,,,`;
 
+
+
         const params = new URLSearchParams();
         params.set("fromSearchWidget", "true");
-        params.set("searchDep", to || "");
+        params.set("searchDep", from || "");
         params.set("dest", to || "");
         params.set("destValue", to || "");
         params.set("depCity", from || "");
         params.set("initd", "searchwidget_landing_custom_notheme");
-        params.set("dateSearched", encodeURIComponent(dateSearched));
+        params.set("dateSearched",dateSearched);
         params.set("glp", "true");
         params.set("pdo", "true");
         params.set("rooms", roomsParam);
