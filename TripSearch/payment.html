@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Add Payment Method</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#47b4eb",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#111c21",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-slate-200 dark:bg-background-dark/90 font-display">
+<div class="fixed inset-0 z-0 overflow-hidden">
+<img alt="" class="w-full h-full object-cover blur-sm opacity-50" data-alt="Blurred background of an airplane wing over clouds" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfPRRZJMoQrnAGaY0dss1fcQrmKFmOZe6MSOdJKs_ONHveqtjLaQIYe7UDPpa7KDuL3g1VfvZViP55erCX9fcp4-j9LjlwTvo7OT-xLdQKcJYqFEZRJT_YDghQk6RbUzd3vCogHKkCoMZCR0s33cD1tGr80jGzUfPaFcKOuXilbfvPTj8tZEfwJubrzg2woQtUvwICucA6oPmnVyW3vaNRSvGfQQhJW01hIXx7wV8zlmKkDlIZ9xIwVa8ooTnr7V6yu2r3hX61NgIz"/>
+</div>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+<!-- Modal Container -->
+<div class="bg-white dark:bg-[#1a262e] w-full max-w-[600px] rounded-xl shadow-2xl overflow-hidden flex flex-col">
+<!-- Header -->
+<div class="px-6 py-4 border-b border-[#dce2e5] dark:border-slate-700 flex justify-between items-center">
+<h2 class="text-xl font-bold text-[#111518] dark:text-white">Add payment method</h2>
+<button class="text-[#637c88] hover:text-[#111518] dark:hover:text-white transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Tabs Section -->
+<div class="px-6">
+<div class="flex border-b border-[#dce2e5] dark:border-slate-700 gap-8">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary pb-[13px] pt-4" href="#">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">credit_card</span>
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Credit/Debit Card</p>
+</div>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-[#637c88] pb-[13px] pt-4" href="#">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">account_balance_wallet</span>
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">UPI</p>
+</div>
+</a>
+</div>
+</div>
+<!-- Modal Content (Scrollable if needed) -->
+<div class="p-6 overflow-y-auto max-h-[70vh]">
+<!-- Card Inputs -->
+<div class="flex flex-col gap-4">
+<!-- Cardholder Name -->
+<div class="flex flex-col gap-2">
+<label class="flex flex-col w-full">
+<p class="text-[#111518] dark:text-slate-200 text-sm font-medium leading-normal pb-2">Cardholder Name</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111518] dark:text-white dark:bg-slate-800 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dce2e5] dark:border-slate-700 h-14 placeholder:text-[#637c88] p-[15px] text-base font-normal leading-normal transition-all" placeholder="John Doe" value=""/>
+</label>
+</div>
+<!-- Card Number -->
+<div class="flex flex-col gap-2">
+<label class="flex flex-col w-full">
+<p class="text-[#111518] dark:text-slate-200 text-sm font-medium leading-normal pb-2">Card Number</p>
+<div class="flex w-full items-stretch rounded-xl group">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111518] dark:text-white dark:bg-slate-800 focus:outline-0 focus:ring-0 border border-[#dce2e5] dark:border-slate-700 focus:border-[#dce2e5] h-14 placeholder:text-[#637c88] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" placeholder="0000 0000 0000 0000" value=""/>
+<div class="text-[#637c88] flex border border-[#dce2e5] dark:border-slate-700 bg-white dark:bg-slate-800 items-center justify-center pr-[15px] rounded-r-xl border-l-0">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+</div>
+</label>
+</div>
+<!-- Expiry and CVV -->
+<div class="flex flex-wrap items-end gap-4">
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-[#111518] dark:text-slate-200 text-sm font-medium leading-normal pb-2">Expiry Date (MM/YY)</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111518] dark:text-white dark:bg-slate-800 focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#dce2e5] dark:border-slate-700 h-14 placeholder:text-[#637c88] p-[15px] text-base font-normal leading-normal transition-all" placeholder="MM/YY" value=""/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-[#111518] dark:text-slate-200 text-sm font-medium leading-normal pb-2">CVV</p>
+<div class="flex w-full items-stretch rounded-xl">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#111518] dark:text-white dark:bg-slate-800 focus:outline-0 focus:ring-0 border border-[#dce2e5] dark:border-slate-700 h-14 placeholder:text-[#637c88] p-[15px] rounded-r-none border-r-0 pr-2 text-base font-normal leading-normal" placeholder="123" value=""/>
+<div class="text-[#637c88] flex border border-[#dce2e5] dark:border-slate-700 bg-white dark:bg-slate-800 items-center justify-center pr-[15px] rounded-r-xl border-l-0">
+<span class="material-symbols-outlined">help</span>
+</div>
+</div>
+</label>
+</div>
+<!-- Action Panel / Toggle -->
+<div class="mt-4 @container">
+<div class="flex flex-1 flex-col items-start justify-between gap-4 rounded-xl border border-[#dce2e5] dark:border-slate-700 bg-background-light dark:bg-slate-800/50 p-5 @[480px]:flex-row @[480px]:items-center transition-colors">
+<div class="flex flex-col gap-1">
+<p class="text-[#111518] dark:text-white text-base font-bold leading-tight">Save for future bookings</p>
+<p class="text-[#637c88] dark:text-slate-400 text-sm font-normal leading-normal">Securely save your card details for faster checkout.</p>
+</div>
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary transition-all">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="px-6 py-5 border-t border-[#dce2e5] dark:border-slate-700 flex flex-col gap-3">
+<button class="w-full bg-primary hover:bg-primary/90 text-white text-base font-bold h-14 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">lock</span>
+                    Save Card &amp; Continue
+                </button>
+<p class="text-center text-[#637c88] text-xs font-normal">
+                    Your payment information is processed securely using end-to-end encryption.
+                </p>
+</div>
+</div>
+</div>
+</body></html>

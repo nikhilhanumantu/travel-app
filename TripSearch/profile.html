@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>TravelBook | Profile & Bookings</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#38BDF8",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#0F172A",
+                    },
+                    fontFamily: {
+                        display: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+        .accordion-content.open {
+            max-height: 1000px;
+            opacity: 1;
+        }
+        .rotate-icon { transition: transform 0.3s ease; }
+        .rotated { transform: rotate(180deg); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+
+<input type="file" id="profile-upload" accept="image/*" class="hidden" onchange="previewImage(event)">
+
+<header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-8 bg-primary rounded-sm transform -skew-x-12 shadow-sm shadow-primary/50"></div>
+                <span class="text-xl font-bold tracking-tight">TravelBook</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="p-2 text-slate-500 hover:text-primary dark:text-slate-400 transition-colors">
+                    <span class="material-icons-outlined">notifications</span>
+                </button>
+                <div class="w-8 h-8 rounded-full overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <img id="avatar-header" alt="User avatar" class="w-full h-full object-cover" src="https://i.pravatar.cc/150?u=alex"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-2xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    
+    <section class="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col items-center mb-8">
+        <div class="relative mb-4 group">
+            <div class="w-24 h-24 rounded-full overflow-hidden ring-4 ring-slate-50 dark:ring-slate-700 transition-all group-hover:ring-primary/30 shadow-xl">
+                <img id="avatar-main" alt="Alex Wanderlust" class="w-full h-full object-cover" src="https://i.pravatar.cc/150?u=alex"/>
+            </div>
+            <button onclick="document.getElementById('profile-upload').click()" class="absolute bottom-0 right-0 bg-primary text-white p-1.5 rounded-full border-2 border-white dark:border-slate-800 shadow-lg hover:scale-110 active:scale-95 transition-all">
+                <span class="material-icons-outlined text-[16px]">edit</span>
+            </button>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Alex Wanderlust</h1>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">alex.wanderlust@email.com</p>
+    </section>
+
+    <section class="mb-8">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 px-1">Account Settings</h2>
+        <div class="space-y-3">
+            
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+                <button onclick="toggleAccordion('booking-content', 'booking-icon')" class="w-full p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-sky-50 dark:bg-sky-900/30 text-primary w-11 h-11 flex items-center justify-center rounded-xl">
+                            <span class="material-icons-outlined">flight_takeoff</span>
+                        </div>
+                        <span class="font-medium text-slate-700 dark:text-slate-200">My Bookings</span>
+                    </div>
+                    <span id="booking-icon" class="material-icons-outlined text-slate-400 rotate-icon">expand_more</span>
+                </button>
+                
+                <div id="booking-content" class="accordion-content border-t border-slate-50 dark:border-slate-700/50">
+                    <div class="flex px-4 pt-4 gap-6 border-b border-slate-50 dark:border-slate-700/50">
+                        <button onclick="switchTab('upcoming')" id="tab-upcoming" class="pb-2 text-sm font-semibold text-primary border-b-2 border-primary transition-all">Upcoming</button>
+                        <button onclick="switchTab('past')" id="tab-past" class="pb-2 text-sm font-medium text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all">Past Trips</button>
+                    </div>
+
+                    <div id="view-upcoming" class="p-4 space-y-3">
+                        <div class="flex items-start gap-4 p-3 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-100 dark:border-slate-600">
+                            <div class="bg-white dark:bg-slate-600 p-2 rounded-lg text-primary shadow-sm">
+                                <span class="material-icons-outlined">flight</span>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="text-sm font-bold">London → Paris</h4>
+                                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 font-bold uppercase">Confirmed</span>
+                                </div>
+                                <p class="text-xs text-slate-500 mt-1">Feb 14, 2026 • 10:30 AM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="view-past" class="hidden p-4 space-y-3">
+                        <div class="flex items-start gap-4 p-3 opacity-60 grayscale">
+                            <div class="bg-slate-200 dark:bg-slate-600 p-2 rounded-lg text-slate-500 shadow-sm">
+                                <span class="material-icons-outlined">history</span>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="text-sm font-bold">New York → Tokyo</h4>
+                                <p class="text-xs text-slate-500 mt-1">Dec 10, 2025 • Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
+                <div class="flex items-center gap-4">
+                    <div class="bg-sky-50 dark:bg-sky-900/30 text-primary w-11 h-11 flex items-center justify-center rounded-xl group-hover:scale-110 transition-transform">
+                        <span class="material-icons-outlined">account_balance_wallet</span>
+                    </div>
+                    <span class="font-medium text-slate-700 dark:text-slate-200">Payments & Wallet</span>
+                </div>
+                <span class="material-icons-outlined text-slate-400 group-hover:translate-x-1 transition-transform">chevron_right</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-10">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4 px-1">Support</h2>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group">
+            <div class="flex items-center gap-4">
+                <div class="bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-300 w-11 h-11 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-600">
+                    <span class="material-icons-outlined">help_outline</span>
+                </div>
+                <span class="font-medium text-slate-700 dark:text-slate-200">Help Center</span>
+            </div>
+            <span class="material-icons-outlined text-slate-400 group-hover:translate-x-1 transition-transform">chevron_right</span>
+        </div>
+    </section>
+
+    <button onclick="window.location.reload()" class="w-full py-4 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 font-semibold rounded-2xl border border-red-100 dark:border-red-900/30 flex items-center justify-center gap-2 hover:bg-red-100 dark:hover:bg-red-950/40 active:scale-95 transition-all mb-12">
+        <span class="material-icons-outlined">logout</span> Logout
+    </button>
+</main>
+
+<button class="fixed bottom-6 right-6 p-3 bg-white dark:bg-slate-800 rounded-full shadow-2xl border border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:scale-110 active:scale-90 transition-all z-50" onclick="toggleDarkMode()">
+    <span class="material-icons-outlined block dark:hidden">dark_mode</span>
+    <span class="material-icons-outlined hidden dark:block text-yellow-400">light_mode</span>
+</button>
+
+<script>
+    // 1. IMAGE UPLOAD LOGIC
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Update the main profile picture
+                document.getElementById('avatar-main').src = e.target.result;
+                // Update the header small avatar
+                document.getElementById('avatar-header').src = e.target.result;
+                
+                // Optional: Animation feedback
+                document.getElementById('avatar-main').parentElement.classList.add('scale-105');
+                setTimeout(() => {
+                    document.getElementById('avatar-main').parentElement.classList.remove('scale-105');
+                }, 300);
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // 2. TOGGLE DARK MODE
+    function toggleDarkMode() {
+        document.documentElement.classList.toggle('dark');
+    }
+
+    // 3. ACCORDION LOGIC
+    function toggleAccordion(contentId, iconId) {
+        const content = document.getElementById(contentId);
+        const icon = document.getElementById(iconId);
+        content.classList.toggle('open');
+        icon.classList.toggle('rotated');
+    }
+
+    // 4. TAB SWITCHER
+    function switchTab(type) {
+        const isUpcoming = type === 'upcoming';
+        document.getElementById('view-upcoming').classList.toggle('hidden', !isUpcoming);
+        document.getElementById('view-past').classList.toggle('hidden', isUpcoming);
+        
+        document.getElementById('tab-upcoming').className = isUpcoming 
+            ? "pb-2 text-sm font-semibold text-primary border-b-2 border-primary transition-all"
+            : "pb-2 text-sm font-medium text-slate-400 hover:text-slate-600 transition-all";
+            
+        document.getElementById('tab-past').className = !isUpcoming 
+            ? "pb-2 text-sm font-semibold text-primary border-b-2 border-primary transition-all"
+            : "pb-2 text-sm font-medium text-slate-400 hover:text-slate-600 transition-all";
+    }
+</script>
+
+</body>
+</html>

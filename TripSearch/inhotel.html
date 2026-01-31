@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Hostel Details</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#47b4eb",
+        "background-light": "#f6f7f8",
+      },
+      fontFamily: {
+        display: ["Plus Jakarta Sans", "sans-serif"],
+      },
+    },
+  },
+};
+</script>
+
+<style>
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; }
+</style>
+
+</head>
+
+<body class="bg-background-light font-display min-h-screen">
+<div class="max-w-[480px] mx-auto bg-white min-h-screen pb-28">
+
+<!-- HEADER -->
+<header class="flex justify-between items-center p-4 border-b sticky top-0 bg-white z-10">
+  <button class="p-2 rounded-full bg-gray-100">
+    <span class="material-symbols-outlined">arrow_back</span>
+  </button>
+  <div class="flex gap-2">
+    <button class="p-2 rounded-full bg-gray-100">
+      <span class="material-symbols-outlined">share</span>
+    </button>
+    <button class="p-2 rounded-full bg-gray-100">
+      <span class="material-symbols-outlined">favorite</span>
+    </button>
+  </div>
+</header>
+
+<!-- IMAGE SCROLL -->
+<div class="flex overflow-x-auto gap-3 p-4 hide-scrollbar">
+  <div class="w-[85%] aspect-[4/3] bg-gray-300 rounded-xl"></div>
+  <div class="w-[85%] aspect-[4/3] bg-gray-300 rounded-xl"></div>
+  <div class="w-[85%] aspect-[4/3] bg-gray-300 rounded-xl"></div>
+</div>
+
+<!-- TITLE -->
+<div class="px-4">
+  <h1 class="text-2xl font-extrabold">The Urban Oasis Hostel</h1>
+  <p class="text-gray-500 text-sm flex items-center gap-1">
+    <span class="material-symbols-outlined text-sm">location_on</span>
+    123 Downtown Street, Berlin, Germany
+  </p>
+</div>
+
+<!-- DATE & GUEST -->
+<div class="px-4 mt-6">
+  <div class="bg-gray-50 rounded-xl p-3 flex justify-between items-center">
+
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-gray-400">calendar_month</span>
+      <div>
+        <p class="text-[10px] font-bold text-gray-500">DATES</p>
+        <p id="dateText" class="font-semibold">Oct 12 - Oct 15</p>
+      </div>
+    </div>
+
+    <div class="w-px h-8 bg-gray-300"></div>
+
+    <div class="flex items-center gap-3">
+      <span class="material-symbols-outlined text-gray-400">group</span>
+      <div>
+        <p class="text-[10px] font-bold text-gray-500">GUESTS</p>
+        <p id="guestText" class="font-semibold">1 Guest</p>
+      </div>
+    </div>
+
+    <button id="editBtn" class="text-primary font-bold">Edit</button>
+  </div>
+
+  <!-- EDIT PANEL -->
+  <div id="editPanel" class="hidden mt-4 bg-white p-4 rounded-xl shadow">
+    <div class="flex flex-col gap-3">
+      <label class="text-sm font-semibold">Check-in</label>
+      <input id="checkIn" type="date" class="border rounded-lg p-2">
+
+      <label class="text-sm font-semibold">Check-out</label>
+      <input id="checkOut" type="date" class="border rounded-lg p-2">
+
+      <label class="text-sm font-semibold">Guests</label>
+      <input id="guests" type="number" min="1" value="1" class="border rounded-lg p-2">
+
+      <button id="saveBtn" class="bg-primary text-white py-2 rounded-lg font-bold">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MAP SECTION -->
+<div class="px-4 mt-8">
+  <h3 class="text-base font-bold mb-3">Location</h3>
+
+  <a
+    href="https://www.google.com/maps/search/?api=1&query=The+Urban+Oasis+Hostel,+123+Downtown+Street,+Berlin,+Germany"
+    target="_blank"
+    class="relative block w-full h-40 rounded-xl overflow-hidden shadow"
+  >
+    <iframe
+      class="w-full h-full pointer-events-none"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      src="https://www.google.com/maps?q=The+Urban+Oasis+Hostel,+123+Downtown+Street,+Berlin,+Germany&z=16&output=embed">
+    </iframe>
+
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="bg-primary text-white p-2 rounded-full shadow-lg animate-bounce">
+        <span class="material-symbols-outlined text-lg">location_on</span>
+      </div>
+    </div>
+  </a>
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4">
+  <div class="max-w-[480px] mx-auto flex justify-between items-center">
+    <div>
+      <p class="text-sm text-gray-500">Starting from</p>
+      <p class="text-xl font-extrabold">2400.00 / night</p>
+    </div>
+    <button class="bg-primary text-white px-6 py-3 rounded-xl font-bold">
+      Book Now
+    </button>
+  </div>
+</div>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+const editBtn = document.getElementById("editBtn");
+const editPanel = document.getElementById("editPanel");
+const saveBtn = document.getElementById("saveBtn");
+
+const dateText = document.getElementById("dateText");
+const guestText = document.getElementById("guestText");
+
+editBtn.onclick = () => {
+  editPanel.classList.toggle("hidden");
+};
+
+// Function to format date as "Jan 31"
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const options = { month: "short", day: "numeric" };
+  return new Date(dateStr).toLocaleDateString("en-US", options);
+}
+
+saveBtn.onclick = () => {
+  const checkIn = document.getElementById("checkIn").value;
+  const checkOut = document.getElementById("checkOut").value;
+  const guests = document.getElementById("guests").value;
+
+  if (checkIn && checkOut) {
+    dateText.textContent = `${formatDate(checkIn)} – ${formatDate(checkOut)}`;
+  }
+
+  guestText.textContent = `${guests} Guest${guests > 1 ? "s" : ""}`;
+  editPanel.classList.add("hidden");
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>TravelGo | Advanced Search</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#2b8cee",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "success-green": "#22c55e",
+              "warning-orange": "#f59e0b",
+              "danger-red": "#ef4444",
+            },
+            fontFamily: {
+              "display": ["Plus Jakarta Sans"]
+            },
+            animation: {
+                'fade-in-up': 'fadeInUp 0.3s ease-out forwards',
+            },
+            keyframes: {
+                fadeInUp: {
+                    '0%': { opacity: '0', transform: 'translateY(10px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' },
+                }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent; bottom: 0; color: transparent; cursor: pointer;
+            height: auto; left: 0; position: absolute; right: 0; top: 0; width: auto;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: #2b8cee; cursor: pointer; margin-top: -6px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 4px; cursor: pointer; background: #e2e8f0; border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen text-[#0d141b] dark:text-slate-200 relative">
+
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+    <div class="layout-container flex h-full grow flex-col">
+        
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark px-6 lg:px-10 py-3 sticky top-0 z-40">
+            <div class="flex items-center gap-8">
+                <div class="flex items-center gap-4 text-primary">
+                    <div class="size-6"><span class="material-symbols-outlined text-3xl">travel_explore</span></div>
+                    <h2 class="text-[#0d141b] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">TravelGo</h2>
+                </div>
+            </div>
+            <div class="flex flex-1 justify-end gap-4">
+                <div class="flex gap-2">
+                    <button class="flex size-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200"><span class="material-symbols-outlined">notifications</span></button>
+                    <button class="flex size-10 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200"><span class="material-symbols-outlined">account_circle</span></button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex flex-1 justify-center py-8">
+            <div class="layout-content-container flex flex-col max-w-[1024px] flex-1 px-4">
+                
+                <div class="bg-white dark:bg-slate-900 p-3 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 mb-6">
+                    <form id="searchForm" class="flex flex-col lg:flex-row gap-2 items-center">
+                        <div class="flex-1 w-full relative group rounded-2xl bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors px-4 py-2 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary text-2xl">circle</span>
+                            <div class="flex flex-col grow">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">From</label>
+                                <input type="text" id="inputFrom" value="Hyderabad" class="bg-transparent border-none p-0 text-lg font-bold text-[#0d141b] dark:text-white focus:ring-0 w-full placeholder-slate-400 truncate">
+                            </div>
+                        </div>
+
+                        <button type="button" id="btnSwap" class="z-10 bg-slate-100 dark:bg-slate-800 p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-primary hover:text-white hover:border-primary transition-all text-slate-500 shadow-sm shrink-0 rotate-90 lg:rotate-0 mx-[-10px] lg:mx-0">
+                            <span class="material-symbols-outlined text-xl">swap_horiz</span>
+                        </button>
+
+                        <div class="flex-1 w-full relative group rounded-2xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors px-4 py-2 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-slate-500 text-2xl">location_on</span>
+                            <div class="flex flex-col grow">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">To</label>
+                                <input type="text" id="inputTo" value="Bangalore" class="bg-transparent border-none p-0 text-lg font-bold text-[#0d141b] dark:text-white focus:ring-0 w-full placeholder-slate-400 truncate">
+                            </div>
+                        </div>
+
+                        <div class="w-full lg:w-48 relative group rounded-2xl bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors px-4 py-2 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-slate-500 text-2xl">calendar_month</span>
+                            <div class="flex flex-col grow relative">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Journey Date</label>
+                                <span id="dateDisplay" class="text-lg font-bold text-[#0d141b] dark:text-white truncate">Oct 25, 2024</span>
+                                <input type="date" id="inputDate" class="absolute inset-0 opacity-0 w-full h-full cursor-pointer z-20">
+                            </div>
+                        </div>
+
+                        <div class="flex w-full lg:w-auto gap-2">
+                            <button type="button" id="btnOpenFilters" class="h-[68px] w-14 shrink-0 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 border border-transparent transition-all relative">
+                                <span class="material-symbols-outlined">tune</span>
+                                <span id="filterCountBadge" class="absolute top-4 right-4 h-5 w-5 bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center hidden">0</span>
+                            </button>
+                            <button type="submit" class="h-[68px] px-8 grow bg-primary hover:bg-primary/90 text-white font-bold rounded-2xl transition-all shadow-lg shadow-primary/30 flex items-center justify-center gap-2">
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="flex pb-6 justify-center">
+                    <div class="flex h-12 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 p-1.5 gap-1">
+                        <button class="mode-tab flex-1 flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-primary" data-mode="flights">
+                            <span class="material-symbols-outlined">flight</span> Flights
+                        </button>
+                        <button class="mode-tab flex-1 flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-primary" data-mode="trains">
+                            <span class="material-symbols-outlined">train</span> Trains
+                        </button>
+                        <button class="mode-tab flex-1 flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all bg-white dark:bg-slate-700 shadow-sm text-primary" data-mode="buses">
+                            <span class="material-symbols-outlined">directions_bus</span> Buses
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-baseline justify-between px-2 pb-2 border-b border-slate-100 dark:border-slate-800 mb-4">
+                    <h2 class="text-[#0d141b] dark:text-white text-xl font-bold">
+                        <span id="resFrom">Hyderabad</span> <span class="text-slate-400 font-light mx-1">→</span> <span id="resTo">Bangalore</span>
+                    </h2>
+                    <span class="text-sm font-medium text-slate-500" id="resultCount">Searching...</span>
+                </div>
+
+                <div class="flex flex-col gap-4" id="resultsContainer"></div>
+
+                <div class="flex justify-center py-10" id="loadMoreContainer">
+                    <button id="btnShowMore" class="flex items-center gap-2 px-8 py-3 rounded-xl border border-slate-200 dark:border-slate-800 text-[#0d141b] dark:text-white font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors hidden">
+                        <span>Show More Results</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bg-white dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 py-8 px-10 text-center">
+            <p class="text-slate-400 text-sm">© 2026 TravelGo. All rights reserved.</p>
+        </footer>
+    </div>
+</div>
+
+<div id="filterModal" class="fixed inset-0 z-50 hidden">
+    <div id="filterBackdrop" class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity opacity-0"></div>
+    <div id="filterPanel" class="absolute right-0 top-0 h-full w-full sm:w-[450px] bg-white dark:bg-slate-900 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="flex items-center justify-between p-6 border-b border-slate-100 dark:border-slate-800">
+            <h3 class="text-xl font-bold dark:text-white">Filters</h3>
+            <button id="btnCloseFilters" class="text-slate-400 hover:text-red-500"><span class="material-symbols-outlined text-2xl">close</span></button>
+        </div>
+        
+        <div id="filterContent" class="flex-1 overflow-y-auto p-6 space-y-8 dark:text-slate-200">
+            </div>
+
+        <div class="p-6 border-t border-slate-100 dark:border-slate-800 flex gap-4 bg-white dark:bg-slate-900">
+            <button id="btnResetFilters" class="flex-1 py-3 text-slate-500 font-bold hover:text-black dark:hover:text-white">Clear</button>
+            <button id="btnApplyFilters" class="flex-[2] py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 shadow-lg shadow-primary/30">Apply</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- State Management ---
+        const state = {
+            mode: 'buses', 
+            filters: {}, 
+            filteredData: [], 
+            page: 1,
+            itemsPerPage: 5
+        };
+
+        // --- MOCK DATA GENERATION (Massive Set) ---
+        const generateData = () => {
+            const buses = [];
+            const trains = [];
+            const flights = [];
+
+            // Helper to pad time
+            const pad = (n) => n.toString().padStart(2, '0');
+
+            // --- 1. BUSES ---
+            const busOperators = ["Orange Tours", "SRS Travels", "Morning Star", "Kaveri Travels", "VRL Logistics", "Jabbar", "IntrCity SmartBus"];
+            for(let i=0; i<150; i++) {
+                const depH = Math.floor(Math.random() * 24);
+                const depM = Math.floor(Math.random() * 60);
+                const durH = 6 + Math.floor(Math.random() * 8);
+                const arrH = (depH + durH) % 24;
+                const isAC = Math.random() > 0.4;
+                const isSleeper = Math.random() > 0.3;
+                const isVolvo = Math.random() > 0.8;
+                
+                buses.push({
+                    id: `b${i}`,
+                    name: busOperators[Math.floor(Math.random() * busOperators.length)],
+                    type: `${isVolvo ? 'Volvo ' : ''}${isAC ? 'AC' : 'Non-AC'} ${isSleeper ? 'Sleeper' : 'Seater'}`,
+                    isAC, isSleeper, isVolvo,
+                    isSeater: !isSleeper,
+                    isPrimo: Math.random() > 0.9,
+                    isFreeCancellation: Math.random() > 0.7,
+                    isSingleSeat: Math.random() > 0.8,
+                    isLiveTracking: Math.random() > 0.5,
+                    rating: (3 + Math.random() * 2).toFixed(1),
+                    dep: `${pad(depH)}:${pad(depM)}`,
+                    arr: `${pad(arrH)}:${pad(depM)}`,
+                    dur: `${durH}h ${pad(Math.floor(Math.random()*59))}m`,
+                    price: 500 + Math.floor(Math.random() * 2000),
+                    depHour: depH,
+                    arrHour: arrH
+                });
+            }
+
+            // --- 2. TRAINS ---
+            const trainNames = ["Vande Bharat", "Rajdhani Exp", "Shatabdi", "Duronto", "Garib Rath", "Intercity", "Telangana Exp"];
+            for(let i=0; i<50; i++) {
+                const depH = Math.floor(Math.random() * 24);
+                const durH = 8 + Math.floor(Math.random() * 12);
+                trains.push({
+                    id: `t${i}`,
+                    name: trainNames[Math.floor(Math.random() * trainNames.length)],
+                    number: 12000 + i,
+                    dep: `${pad(depH)}:${pad(Math.floor(Math.random()*60))}`,
+                    arr: `${pad((depH + durH)%24)}:${pad(Math.floor(Math.random()*60))}`,
+                    dur: `${durH}h`,
+                    rating: (3.5 + Math.random() * 1.5).toFixed(1),
+                    isTatkal: Math.random() > 0.7,
+                    classes: ['SL', '3A', '2A', Math.random()>0.8?'1A':null].filter(Boolean),
+                    availability: [
+                        { class: "SL", price: 400 + Math.floor(Math.random()*400), status: Math.random()>0.5 ? "AVAILABLE" : "WL-20", color: Math.random()>0.5?"text-success-green":"text-warning-orange" },
+                        { class: "3A", price: 1000 + Math.floor(Math.random()*800), status: "AVAILABLE", color: "text-success-green" },
+                        { class: "2A", price: 2000 + Math.floor(Math.random()*1000), status: "WL-5", color: "text-warning-orange" }
+                    ]
+                });
+            }
+
+            // --- 3. FLIGHTS ---
+            const airlines = ["IndiGo", "Air India", "Air-India Express", "Alliance Air", "Vistara", "Akasa Air"];
+            for(let i=0; i<80; i++) {
+                const depH = Math.floor(Math.random() * 24);
+                const stops = Math.random() > 0.6 ? (Math.random() > 0.5 ? 2 : 1) : 0;
+                const price = 3000 + (stops * 1500) + Math.floor(Math.random() * 5000);
+                flights.push({
+                    id: `f${i}`,
+                    name: airlines[Math.floor(Math.random() * airlines.length)],
+                    code: `FL-${100+i}`,
+                    dep: `${pad(depH)}:${pad(Math.floor(Math.random()*60))}`,
+                    arr: `${pad((depH + 2 + stops*3)%24)}:${pad(Math.floor(Math.random()*60))}`,
+                    dur: `${2 + stops*3}h 15m`,
+                    price: price,
+                    stops: stops,
+                    hasMeal: Math.random() > 0.5,
+                    depHour: depH,
+                    arrHour: (depH + 2 + stops*3)%24
+                });
+            }
+
+            return { buses, trains, flights };
+        };
+
+        const rawData = generateData();
+
+        // --- DOM Elements ---
+        const resultsContainer = document.getElementById('resultsContainer');
+        const loadMoreBtn = document.getElementById('btnShowMore');
+        const filterModal = document.getElementById('filterModal');
+        const filterContent = document.getElementById('filterContent');
+        const filterCountBadge = document.getElementById('filterCountBadge');
+
+        // --- Initialization ---
+        function init() {
+            setupModeTabs();
+            setupSearchForm();
+            setupFilterUI();
+            setupLoadMore();
+            applyFilters(); 
+        }
+
+        // --- Core Rendering Logic ---
+        function renderResults(append = false) {
+            const start = (state.page - 1) * state.itemsPerPage;
+            const end = start + state.itemsPerPage;
+            const pageData = state.filteredData.slice(start, end);
+
+            if (!append) {
+                resultsContainer.innerHTML = '';
+                document.getElementById('resultCount').textContent = `${state.filteredData.length} ${state.mode} found`;
+            }
+
+            if (state.filteredData.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-12 text-center opacity-60">
+                        <span class="material-symbols-outlined text-6xl mb-4">search_off</span>
+                        <h3 class="text-xl font-bold dark:text-white">No results found</h3>
+                        <p class="text-sm">Try adjusting your filters.</p>
+                    </div>`;
+                loadMoreBtn.classList.add('hidden');
+                return;
+            }
+
+            pageData.forEach((item, index) => {
+                const delay = index * 50; 
+                let html = '';
+
+                if (state.mode === 'buses') {
+                    html = `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-all animate-fade-in-up" style="animation-delay: ${delay}ms">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-lg font-bold dark:text-white flex items-center gap-2">
+                                    ${item.name}
+                                    ${item.isPrimo ? '<span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-0.5 rounded font-bold">PRIMO</span>' : ''}
+                                </h3>
+                                <p class="text-xs text-slate-500 font-medium">${item.type}</p>
+                            </div>
+                            <div class="text-right"><div class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold inline-flex items-center gap-1"><span class="material-symbols-outlined text-[10px]">star</span> ${item.rating}</div></div>
+                        </div>
+                        <div class="flex items-center justify-between py-2">
+                            <div><span class="text-xl font-bold block dark:text-white">${item.dep}</span><span class="text-xs text-slate-400">Hyderabad</span></div>
+                            <div class="flex flex-col items-center px-4"><span class="text-xs text-slate-400 mb-1">${item.dur}</span><div class="w-24 h-[2px] bg-slate-200 dark:bg-slate-700 relative"><div class="absolute -right-1 -top-1 size-2 rounded-full bg-primary"></div></div></div>
+                            <div class="text-right"><span class="text-xl font-bold block dark:text-white">${item.arr}</span><span class="text-xs text-slate-400">Bangalore</span></div>
+                        </div>
+                        <div class="flex justify-between items-center mt-5 pt-4 border-t border-slate-50 dark:border-slate-800">
+                            <div class="flex gap-2">
+                                ${item.isLiveTracking ? '<span class="text-[10px] flex items-center gap-1 text-slate-500"><span class="material-symbols-outlined text-sm">location_on</span> Live Tracking</span>' : ''}
+                                ${item.isFreeCancellation ? '<span class="text-[10px] flex items-center gap-1 text-slate-500 bg-slate-100 px-2 rounded">Free Cancel</span>' : ''}
+                            </div>
+                            <div class="flex items-center gap-3"><span class="text-xl font-bold dark:text-white">₹${item.price}</span><button class="bg-primary text-white text-sm font-bold py-2 px-5 rounded-lg hover:bg-primary/90">Select</button></div>
+                        </div>
+                    </div>`;
+                } else if (state.mode === 'trains') {
+                    const availHtml = item.availability.map(cls => `
+                        <div class="border border-slate-200 dark:border-slate-700 rounded-lg p-2 min-w-[90px] text-center cursor-pointer hover:border-primary hover:bg-blue-50 dark:hover:bg-slate-800 transition-colors">
+                            <div class="text-xs font-bold dark:text-white mb-1">${cls.class}</div>
+                            <div class="text-xs font-bold ${cls.color}">${cls.status}</div>
+                            <div class="text-xs text-slate-500">₹${cls.price}</div>
+                        </div>
+                    `).join('');
+
+                    html = `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-all animate-fade-in-up" style="animation-delay: ${delay}ms">
+                        <div class="flex justify-between items-start mb-2">
+                            <div><h3 class="text-lg font-bold dark:text-white flex items-center gap-2"><span class="material-symbols-outlined text-primary">train</span> ${item.name} <span class="text-xs bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-slate-500">${item.number}</span></h3></div>
+                            ${item.isTatkal ? '<span class="text-xs font-bold text-red-500 border border-red-200 bg-red-50 px-2 py-0.5 rounded">Tatkal Available</span>' : ''}
+                        </div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div><span class="text-xl font-bold dark:text-white">${item.dep}</span></div>
+                            <div class="flex items-center gap-2"><span class="h-[1px] w-8 bg-slate-300"></span><span class="text-xs text-slate-400">${item.dur}</span><span class="h-[1px] w-8 bg-slate-300"></span></div>
+                            <div><span class="text-xl font-bold dark:text-white">${item.arr}</span></div>
+                        </div>
+                        <div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">${availHtml}</div>
+                    </div>`;
+                } else if (state.mode === 'flights') {
+                    html = `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-100 dark:border-slate-800 hover:shadow-md transition-all animate-fade-in-up" style="animation-delay: ${delay}ms">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center gap-3">
+                                <div class="size-8 rounded-full bg-slate-100 flex items-center justify-center"><span class="material-symbols-outlined text-slate-400 text-lg">airlines</span></div>
+                                <div><h3 class="font-bold dark:text-white">${item.name}</h3><p class="text-xs text-slate-500">${item.code}</p></div>
+                            </div>
+                            <div class="flex gap-2">
+                                ${item.hasMeal ? '<span class="text-[10px] bg-green-50 text-green-700 px-2 py-1 rounded font-bold">Free Meal</span>' : ''}
+                                <span class="text-xs font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded">${item.stops === 0 ? 'Non-stop' : item.stops + ' Stop(s)'}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div><span class="text-xl font-bold block dark:text-white">${item.dep}</span><span class="text-xs text-slate-400">HYD</span></div>
+                            <div class="flex flex-col items-center"><span class="text-xs text-slate-400 mb-1">${item.dur}</span><span class="material-symbols-outlined text-slate-300 rotate-90">flight</span></div>
+                            <div class="text-right"><span class="text-xl font-bold block dark:text-white">${item.arr}</span><span class="text-xs text-slate-400">BLR</span></div>
+                        </div>
+                         <div class="flex justify-end items-center mt-4 border-t border-slate-50 dark:border-slate-800 pt-3">
+                            <div class="flex items-center gap-3"><span class="text-xl font-bold dark:text-white">₹${item.price}</span><button class="bg-primary text-white text-sm font-bold py-2 px-5 rounded-lg hover:bg-primary/90">Book</button></div>
+                        </div>
+                    </div>`;
+                }
+                resultsContainer.insertAdjacentHTML('beforeend', html);
+            });
+
+            // Handle Load More Visibility
+            if (end >= state.filteredData.length) {
+                loadMoreBtn.classList.add('hidden');
+            } else {
+                loadMoreBtn.classList.remove('hidden');
+            }
+        }
+
+        // --- Filter Logic ---
+        function applyFilters() {
+            let data = rawData[state.mode];
+            const f = state.filters;
+            
+            // --- BUS FILTERS ---
+            if (state.mode === 'buses') {
+                if(f.primo) data = data.filter(i => i.isPrimo);
+                if(f.freeCancel) data = data.filter(i => i.isFreeCancellation);
+                if(f.ac) data = data.filter(i => i.isAC);
+                if(f.sleeper) data = data.filter(i => i.isSleeper);
+                if(f.seater) data = data.filter(i => i.isSeater);
+                if(f.nonac) data = data.filter(i => !i.isAC);
+                if(f.volvo) data = data.filter(i => i.isVolvo);
+                if(f.singleSeat) data = data.filter(i => i.isSingleSeat);
+                if(f.liveTracking) data = data.filter(i => i.isLiveTracking);
+                
+                if(f.depTime) { // Array of ranges
+                     data = data.filter(i => {
+                        const h = i.depHour;
+                        return f.depTime.some(t => {
+                            if(t === 'morning') return h >= 6 && h < 12;
+                            if(t === 'afternoon') return h >= 12 && h < 18;
+                            if(t === 'evening') return h >= 18 && h < 24;
+                            if(t === 'night') return h >= 0 && h < 6;
+                        });
+                     });
+                }
+                if(f.arrTime) { 
+                     data = data.filter(i => {
+                        const h = i.arrHour;
+                        return f.arrTime.some(t => {
+                            if(t === 'morning') return h >= 6 && h < 12;
+                            if(t === 'evening') return h >= 18 && h < 24;
+                            if(t === 'night') return h >= 0 && h < 6;
+                        });
+                     });
+                }
+            } 
+            // --- TRAIN FILTERS ---
+            else if (state.mode === 'trains') {
+                if(f.tatkal) data = data.filter(i => i.isTatkal);
+                if(f.acOnly) data = data.filter(i => i.classes.some(c => c.includes('A') || c === 'CC' || c === 'EC'));
+            }
+            // --- FLIGHT FILTERS ---
+            else if (state.mode === 'flights') {
+                if(f.stops && f.stops.length) data = data.filter(i => f.stops.includes(i.stops.toString())); // '0', '1', '2+'
+                if(f.meal) data = data.filter(i => i.hasMeal);
+                if(f.airlines && f.airlines.length) data = data.filter(i => f.airlines.includes(i.name));
+                if(f.priceMax) data = data.filter(i => i.price <= f.priceMax);
+                
+                if(f.depTimeFlight) {
+                    data = data.filter(i => {
+                        const h = i.depHour;
+                        return f.depTimeFlight.some(t => {
+                            if(t === 'before6') return h < 6;
+                            if(t === '6to12') return h >= 6 && h < 12;
+                            if(t === '12to6') return h >= 12 && h < 18;
+                            if(t === 'after6') return h >= 18;
+                        });
+                    });
+                }
+            }
+
+            state.filteredData = data;
+            state.page = 1;
+            renderResults();
+            updateFilterCounts(); // Updates badges in sidebar
+        }
+
+        // --- UI Builders ---
+        function getCount(mode, filterFn) {
+            return rawData[mode].filter(filterFn).length;
+        }
+
+        function buildFilterUI() {
+            let html = '';
+            const d = rawData[state.mode];
+
+            if (state.mode === 'buses') {
+                // RedBus Style Categories
+                const cats = [
+                    {id: 'freeCancel', label: 'Free Cancellation', fn: i=>i.isFreeCancellation},
+                    {id: 'primo', label: 'Primo Bus', fn: i=>i.isPrimo},
+                    {id: 'ac', label: 'AC', fn: i=>i.isAC},
+                    {id: 'nonac', label: 'NON-AC', fn: i=>!i.isAC},
+                    {id: 'sleeper', label: 'SLEEPER', fn: i=>i.isSleeper},
+                    {id: 'seater', label: 'SEATER', fn: i=>i.isSeater},
+                    {id: 'singleSeat', label: 'Single Seats', fn: i=>i.isSingleSeat},
+                    {id: 'liveTracking', label: 'Live Tracking', fn: i=>i.isLiveTracking},
+                    {id: 'volvo', label: 'Volvo Buses', fn: i=>i.isVolvo},
+                ];
+
+                html += `<div class="space-y-4"><h4 class="font-bold text-sm uppercase text-slate-500">Filter Buses</h4><div class="space-y-2">`;
+                cats.forEach(c => {
+                    const count = getCount('buses', c.fn);
+                    html += `<label class="flex justify-between cursor-pointer group"><div class="flex items-center gap-3"><input type="checkbox" name="busCat" value="${c.id}" class="rounded border-slate-300 text-primary focus:ring-primary"><span class="text-sm font-medium group-hover:text-primary transition-colors">${c.label}</span></div><span class="text-xs text-slate-400">(${count})</span></label>`;
+                });
+                html += `</div></div><hr class="border-slate-100 dark:border-slate-800">`;
+
+                // Departure Time
+                html += `<div class="space-y-4"><h4 class="font-bold text-sm uppercase text-slate-500">Departure Time</h4><div class="grid grid-cols-2 gap-3">`;
+                const deps = [
+                    {val:'morning', label:'Morning', time:'06:00-12:00', icon:'wb_sunny'},
+                    {val:'afternoon', label:'Afternoon', time:'12:00-18:00', icon:'sunny'},
+                    {val:'evening', label:'Evening', time:'18:00-00:00', icon:'wb_twilight'},
+                    {val:'night', label:'Night', time:'00:00-06:00', icon:'bedtime'}
+                ];
+                deps.forEach(t => {
+                    html += `<label class="cursor-pointer relative"><input type="checkbox" name="busDep" value="${t.val}" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-center peer-checked:bg-blue-50 peer-checked:border-primary peer-checked:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"><span class="material-symbols-outlined text-lg mb-1">${t.icon}</span><div class="text-xs font-bold">${t.label}</div><div class="text-[10px] text-slate-400">${t.time}</div></div></label>`;
+                });
+                html += `</div></div><hr class="border-slate-100 dark:border-slate-800">`;
+                
+                // Arrival Time
+                html += `<div class="space-y-4"><h4 class="font-bold text-sm uppercase text-slate-500">Arrival Time</h4><div class="grid grid-cols-2 gap-3">`;
+                const arrs = [
+                    {val:'morning', label:'Morning', time:'06:00-12:00'},
+                    {val:'evening', label:'Evening', time:'18:00-00:00'},
+                    {val:'night', label:'Night', time:'00:00-06:00'}
+                ];
+                arrs.forEach(t => {
+                     html += `<label class="cursor-pointer relative"><input type="checkbox" name="busArr" value="${t.val}" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-center peer-checked:bg-blue-50 peer-checked:border-primary peer-checked:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"><div class="text-xs font-bold">${t.label}</div><div class="text-[10px] text-slate-400">${t.time}</div></div></label>`;
+                });
+                html += `</div></div>`;
+
+            } else if (state.mode === 'trains') {
+                html += `<div class="space-y-4"><h4 class="font-bold text-sm uppercase text-slate-500">Quick Filters</h4><div class="space-y-3">
+                    <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" name="trainQuick" value="tatkal" class="rounded border-slate-300 text-primary"><span class="text-sm font-medium">Tatkal Available Only</span></label>
+                    <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" name="trainQuick" value="acOnly" class="rounded border-slate-300 text-primary"><span class="text-sm font-medium">AC Classes Only</span></label>
+                </div></div>`;
+
+            } else if (state.mode === 'flights') {
+                // Stops
+                const stops = [
+                    {val:'0', label:'Non-Stop', price: '₹3,956'},
+                    {val:'1', label:'1 Stop', price: '₹4,427'},
+                    {val:'2+', label:'2+ Stops', price: '₹8,072'}
+                ];
+                html += `<div class="space-y-4"><h4 class="font-bold text-sm uppercase text-slate-500">Stops</h4><div class="flex gap-2">`;
+                stops.forEach(s => {
+                    html += `<label class="flex-1 cursor-pointer"><input type="checkbox" name="flightStops" value="${s.val}" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-center peer-checked:bg-blue-50 peer-checked:border-primary peer-checked:text-primary hover:bg-slate-50 transition-all"><div class="text-xs font-bold">${s.label}</div><div class="text-[10px] text-slate-400">${s.price}</div></div></label>`;
+                });
+                html += `</div></div><hr class="border-slate-100 dark:border-slate-800">`;
+
+                // Price Slider
+                html += `<div class="space-y-4"><div class="flex justify-between"><h4 class="font-bold text-sm uppercase text-slate-500">Price</h4><span class="text-xs font-bold text-primary">Up to ₹<span id="priceVal">20000</span></span></div><input type="range" id="flightPriceRange" min="3000" max="25000" step="500" value="20000" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer"></div><hr class="border-slate-100 dark:border-slate-800">`;
+
+                // Airlines
+                const airlines = ["IndiGo", "Air India", "Air-India Express", "Alliance Air", "Vistara"];
+                html += `<div class="space-y-4"><h4 class="font-bold text-sm uppercase text-slate-500">Airlines</h4><div class="space-y-2">`;
+                airlines.forEach(a => {
+                    // Calc dynamic min price for visual realism
+                    const minP = Math.min(...rawData.flights.filter(f=>f.name===a).map(f=>f.price), 9999);
+                    const count = getCount('flights', f=>f.name===a);
+                    if(count > 0) {
+                        html += `<label class="flex justify-between cursor-pointer group"><div class="flex items-center gap-3"><input type="checkbox" name="flightAirline" value="${a}" class="rounded border-slate-300 text-primary focus:ring-primary"><span class="text-sm font-medium group-hover:text-primary transition-colors">${a}</span><span class="text-xs text-slate-400">(${count})</span></div><span class="text-xs font-bold text-slate-500">₹${minP}</span></label>`;
+                    }
+                });
+                html += `</div></div><hr class="border-slate-100 dark:border-slate-800">`;
+
+                 // Flight Departure Time
+                html += `<div class="space-y-4"><h4 class="font-bold text-sm uppercase text-slate-500">Departure Time</h4><div class="grid grid-cols-2 gap-2">`;
+                const fdeps = [
+                    {val:'before6', label:'Before 6AM'},
+                    {val:'6to12', label:'6AM - 12PM'},
+                    {val:'12to6', label:'12PM - 6PM'},
+                    {val:'after6', label:'After 6PM'}
+                ];
+                fdeps.forEach(t => {
+                    html += `<label class="cursor-pointer"><input type="checkbox" name="flightDep" value="${t.val}" class="peer sr-only"><div class="border border-slate-200 dark:border-slate-700 rounded-lg p-2 text-center peer-checked:bg-blue-50 peer-checked:border-primary peer-checked:text-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition-all"><div class="text-xs font-bold">${t.label}</div></div></label>`;
+                });
+                html += `</div></div>`;
+            }
+
+            filterContent.innerHTML = html;
+
+            // Attach Slider Listener
+            if(state.mode === 'flights') {
+                document.getElementById('flightPriceRange').addEventListener('input', (e) => {
+                    document.getElementById('priceVal').textContent = e.target.value;
+                });
+            }
+        }
+
+        // --- Interaction Handlers ---
+        function updateFilterCounts() {
+            // Simple visual update if needed, currently apply logic handles rendering
+        }
+
+        function setupLoadMore() {
+            loadMoreBtn.addEventListener('click', () => {
+                state.page++;
+                renderResults(true); // Append mode
+            });
+        }
+
+        function setupFilterUI() {
+            const openBtn = document.getElementById('btnOpenFilters');
+            const closeBtn = document.getElementById('btnCloseFilters');
+            const applyBtn = document.getElementById('btnApplyFilters');
+            const resetBtn = document.getElementById('btnResetFilters');
+            const backdrop = document.getElementById('filterBackdrop');
+            const panel = document.getElementById('filterPanel');
+
+            function toggleModal(show) {
+                if(show) {
+                    buildFilterUI(); 
+                    filterModal.classList.remove('hidden');
+                    setTimeout(() => {
+                        backdrop.classList.remove('opacity-0');
+                        panel.classList.remove('translate-x-full');
+                    }, 10);
+                } else {
+                    backdrop.classList.add('opacity-0');
+                    panel.classList.add('translate-x-full');
+                    setTimeout(() => filterModal.classList.add('hidden'), 300);
+                }
+            }
+
+            openBtn.addEventListener('click', () => toggleModal(true));
+            closeBtn.addEventListener('click', () => toggleModal(false));
+            backdrop.addEventListener('click', () => toggleModal(false));
+
+            applyBtn.addEventListener('click', () => {
+                const f = {};
+                
+                if(state.mode === 'buses') {
+                    // Checkboxes
+                    const checkboxes = document.querySelectorAll('input[name="busCat"]:checked');
+                    checkboxes.forEach(c => f[c.value] = true);
+                    
+                    // Dep Arrays
+                    const deps = Array.from(document.querySelectorAll('input[name="busDep"]:checked')).map(i=>i.value);
+                    if(deps.length) f.depTime = deps;
+
+                    // Arr Arrays
+                    const arrs = Array.from(document.querySelectorAll('input[name="busArr"]:checked')).map(i=>i.value);
+                    if(arrs.length) f.arrTime = arrs;
+
+                } else if(state.mode === 'trains') {
+                     const quicks = document.querySelectorAll('input[name="trainQuick"]:checked');
+                     quicks.forEach(q => f[q.value] = true);
+
+                } else if(state.mode === 'flights') {
+                    const stops = Array.from(document.querySelectorAll('input[name="flightStops"]:checked')).map(i=>i.value);
+                    if(stops.length) f.stops = stops;
+
+                    const price = document.getElementById('flightPriceRange');
+                    if(price) f.priceMax = parseInt(price.value);
+
+                    const airlines = Array.from(document.querySelectorAll('input[name="flightAirline"]:checked')).map(i=>i.value);
+                    if(airlines.length) f.airlines = airlines;
+
+                    const fdeps = Array.from(document.querySelectorAll('input[name="flightDep"]:checked')).map(i=>i.value);
+                    if(fdeps.length) f.depTimeFlight = fdeps;
+                }
+
+                state.filters = f;
+                applyFilters();
+                toggleModal(false);
+            });
+
+            resetBtn.addEventListener('click', () => {
+                state.filters = {};
+                applyFilters();
+                toggleModal(false);
+            });
+        }
+
+        function setupModeTabs() {
+            const tabs = document.querySelectorAll('.mode-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.className = "mode-tab flex-1 flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-primary");
+                    tab.className = "mode-tab flex-1 flex items-center gap-2 px-6 rounded-lg text-sm font-bold transition-all bg-white dark:bg-slate-700 shadow-sm text-primary";
+                    state.mode = tab.dataset.mode;
+                    state.filters = {};
+                    state.page = 1;
+                    applyFilters(); 
+                });
+            });
+        }
+
+        function setupSearchForm() {
+            document.getElementById('searchForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                document.getElementById('resFrom').textContent = document.getElementById('inputFrom').value;
+                document.getElementById('resTo').textContent = document.getElementById('inputTo').value;
+                state.page = 1;
+                applyFilters();
+            });
+            document.getElementById('inputDate').addEventListener('change', (e) => {
+                if(e.target.value) {
+                    const d = new Date(e.target.value);
+                    document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                }
+            });
+            document.getElementById('btnSwap').addEventListener('click', () => {
+                const f = document.getElementById('inputFrom');
+                const t = document.getElementById('inputTo');
+                const temp = f.value; f.value = t.value; t.value = temp;
+            });
+        }
+
+        init();
+    });
+</script>
+</body>
+</html>
